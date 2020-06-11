@@ -10,6 +10,8 @@ public class User {
 	private String address;
 	private String gender;
 	
+	private int uloga = 0; // 0 - Korisnik; 1 - Admin; 2 - Agent
+	
 	public User(){
 		
 	}
@@ -25,6 +27,19 @@ public class User {
 		this.address = address;
 		this.gender = gender;
 		
+	}
+	
+	public User(String userName, String password, String firstName, String lastName, String email, String address, String gender, int uloga) {
+		
+		super();
+		this.userName = userName;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.address = address;
+		this.gender = gender;
+		this.uloga = uloga;
 	}
 	
 	public String getUserName() {
@@ -72,4 +87,12 @@ public class User {
 		this.gender = gender;
 	}
 
+	public int getUloga() {
+		return uloga;
+	}
+
+	public void setUloga(int uloga) {
+		this.uloga = uloga;
+	}
+	
 }

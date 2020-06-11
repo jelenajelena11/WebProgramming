@@ -1,40 +1,54 @@
 $(document).ready(function(){
 	
-	$("btnLogin").click(function(){
+	$('#loginForm').submit( (event)=>{
+		event.preventDefault();
 		
-		localStorage.clear();
+		//localStorage.clear();
 		var userName = $('#loginUserName').val();
-		localStorage.setItem("userName", userName);
+		let password = $('#loginPassword').val();
+		//localStorage.setItem("userName", userName);
+		//console.log(localStorage.getItem("userName"));
 		
-		console.log(localStorage.getItem("userName"));
-		
-		var obj = {"userName":$('#loginUserName').val(), "password" : $('#loginPassword').val()};
+		var obj = {"userName":userName, "password" : password};
 		console.log(obj);
 		
 		$.ajax({
         	contentType: 'application/json',
-            url: '../PocetniREST/rest/users/loginUser',
+            url: '../PocetniREST/rest/login',
             type : 'POST',
             data: JSON.stringify(obj),
             success: function(response){
             	if(response==null){
             		console.log('NULL');
-            		document.getElementById("messageLogin").className = '';
+            		alert('Pogresno Korisnicko Ime ili Lozinka.');
+            		//document.getElementById("messageLogin").className = '';
             	}else{
+            		console.log('Success in login!');
+            		
+            		if(response.uloga == 0){
+            			window.location = './korisnik.html';
+            		}else if(response.uloga == 1){
+            			window.location = './administrator.html';
+            		}else if(response.uloga == 2){
+            			window.location = './agent.html';
+            		}
+            		
             		/*
             		if(response.role=="admin"){
             			localStorage.setItem("admin", "true");
             		}
             		localStorage.setItem("blokiran", response.blokiran);
-            */
-            		window.location.href = "findApartment.html";
+            		 */
+            		
+            		//window.location.href = "findApartment.html";
             	}
 
-            }
-        });
-	});
+              }
+          });
+	  });
 	
-$("#btnRegister").click(function(){
+	
+	$("#btnRegister").click(function(){
     	
     	var obj = { "userName":$('#userName').val(), "firstName" : $('#firstName').val(), "lastName" : $('#lastName').val(), "gender" : $('#gender').val(), "password" : $('#password').val(), "confirmPassword" : $('#confirmPassword').val()};
     	var userName = $('#userName').val();
@@ -65,5 +79,5 @@ $("#btnRegister").click(function(){
 
             }
         });     
-    }); 
-});
+      }); 
+})
