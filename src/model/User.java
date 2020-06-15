@@ -10,7 +10,7 @@ public class User {
 	private String address;
 	private String gender;
 	
-	private int uloga = 0; // 0 - Korisnik; 1 - Admin; 2 - Agent
+	private int uloga = 0; // 0 - Korisnik; 1 - Admin; 2 - Domacin
 	
 	public User(){
 		

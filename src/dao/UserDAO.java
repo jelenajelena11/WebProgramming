@@ -9,9 +9,9 @@ public class UserDAO {
 	private HashMap<String, User> users = new HashMap<String, User>();
 	
 	public UserDAO() {
-		this.users.put("administrator", new User("Goku", "goran", "Goran", "Kuljanin", "goku@gmail.com", "Ugljevik", "M", 1));
-		this.users.put("agent", new User("Jela", "goran", "Jelena", "Stojanovic", "jela@gmail.com", "Novi Sad", "F", 2));
-		this.users.put("korisnik", new User("Korisnik", "goran", "Korisnik", "Korisnikc", "korisnik@gmail.com", "Bijeljina", "F", 0));
+		this.users.put("Goku", new User("Goku", "goran", "Goran", "Kuljanin", "goku@gmail.com", "Ugljevik", "M", 1));
+		this.users.put("Jela", new User("Jela", "goran", "Jelena", "Stojanovic", "jela@gmail.com", "Novi Sad", "F", 2));
+		this.users.put("Korisnik", new User("Korisnik", "goran", "Korisnik", "Korisnik", "korisnik@gmail.com", "Bijeljina", "F", 0));
 	}
 	
 	public HashMap<String, User> getUsers(){
@@ -33,5 +33,12 @@ public class UserDAO {
 			}
 		}
 		return null;
+	}
+	
+	public boolean find(String username) {
+		if (users.containsKey(username)) {
+			return true;
+		}
+		return false;
 	}
 }

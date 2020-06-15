@@ -44,6 +44,22 @@ public class LoginService {
 		return u;
 	}
 	
+	@POST
+	@Path("/register")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response register(User user, @Context HttpServletRequest request) {
+		UserDAO userDAO = (UserDAO) ctx.getAttribute("userDAO");
+		boolean postoji = userDAO.find(user.getUserName());
+		
+		if(postoji) {
+			return Response.status(400).build();
+		}
+		userDAO.getUsers().put(user.getUserName(), user);
+		ctx.setAttribute("userDAO", userDAO);
+		return Response.status(200).build();
+	}
+	
 	@GET
 	@Path("/logout")
 	@Produces(MediaType.APPLICATION_JSON)
