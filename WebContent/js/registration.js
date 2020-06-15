@@ -3,8 +3,7 @@ $(document).ready(function(){
 	$('#registerForm').submit( (event)=>{
 		event.preventDefault();
 		
-		var obj = { "userName":$('#userName').val(), "firstName" : $('#firstName').val(), "lastName" : $('#lastName').val(), "gender" : $('#gender').val(), "password" : $('#password').val(), "confirmPassword" : $('#confirmPassword').val()};
-		var userName = $('#userName').val();
+		var obj = { "userName":$('#userName').val(), "firstName" : $('#firstName').val(), "lastName" : $('#lastName').val(), "gender" : $('#gender').val(), "password" : $('#password').val()};
 		   
 		console.log(JSON.stringify(obj));
 		$.ajax({
