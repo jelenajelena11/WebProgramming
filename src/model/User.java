@@ -1,5 +1,8 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
 	
 	private String userName;
@@ -11,6 +14,11 @@ public class User {
 	private String gender;
 	
 	private int uloga = 0; // 0 - Korisnik; 1 - Admin; 2 - Domacin
+	
+	private List<Apartman> apartmaniZaIznajmljivanje = new ArrayList<Apartman>();	//Domacin
+	private List<Rezervacija> zakazaneRezervacije = new ArrayList<Rezervacija>();	//Gost
+	
+	private List<Apartman> iznajmljeniApartmani = new ArrayList<Apartman>();	//Gost
 	
 	public User(){
 		
@@ -93,6 +101,30 @@ public class User {
 
 	public void setUloga(int uloga) {
 		this.uloga = uloga;
+	}
+
+	public List<Apartman> getApartmaniZaIznajmljivanje() {
+		return apartmaniZaIznajmljivanje;
+	}
+
+	public void setApartmaniZaIznajmljivanje(List<Apartman> apartmaniZaIznajmljivanje) {
+		this.apartmaniZaIznajmljivanje = apartmaniZaIznajmljivanje;
+	}
+
+	public List<Rezervacija> getZakazaneRezervacije() {
+		return zakazaneRezervacije;
+	}
+
+	public void setZakazaneRezervacije(List<Rezervacija> zakazaneRezervacije) {
+		this.zakazaneRezervacije = zakazaneRezervacije;
+	}
+
+	public List<Apartman> getIznajmljeniApartmani() {
+		return iznajmljeniApartmani;
+	}
+
+	public void setIznajmljeniApartmani(List<Apartman> iznajmljeniApartmani) {
+		this.iznajmljeniApartmani = iznajmljeniApartmani;
 	}
 	
 }

@@ -1,6 +1,12 @@
 $(document).ready(function(){
 	
-	$('a[href = "#odjava"]').click(function(){
+	$('#odjava').click(logout());
+	
+})
+
+function logout(){
+	return function(event){
+		event.preventDefault();
 		
 		$.ajax({
 			url : '../PocetniREST/rest/logout',
@@ -10,6 +16,5 @@ $(document).ready(function(){
 				window.location = './index.html';
 			}
 		});
-	});
-	
-})
+	}
+}

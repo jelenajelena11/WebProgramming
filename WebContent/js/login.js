@@ -30,7 +30,7 @@ $(document).ready(function(){
             		}else if(response.uloga == 1){
             			window.location = './administrator.html';
             		}else if(response.uloga == 2){
-            			window.location = './agent.html';
+            			window.location = './domacin.html';
             		}
             		
             		/*
