@@ -2,18 +2,39 @@
 <html>
 <head>
 	
-	<script src="./js/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
-	<script src="./js/korisnik.js" type="text/javascript"></script>
+<script src="./js/lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+<script src="./js/korisnik.js" type="text/javascript"></script>
 	
-	<meta charset="ISO-8859-1">
-	<title>Korisnik</title>
+<meta charset="UTF-8">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
+<link rel="icon" type="image/x-icon" href="assets/img/apple-icon-57x57.png" />
+<link href="css/domacinPage.css" rel="stylesheet" />
+<title>Korisnik</title>
 </head>
 
 <body>
-
-	<h1>Welcome to Korisnik, it works!</h1>
 	
-	<a href="#odjava" >Logout</a>
+	<!-- <a href="#odjava" >Logout</a> -->
+
+	
+	<div id="sidebar">
+	<div class="toggle-btn" onclick="toggleSidebar">
+		<span></span>
+		<span></span>
+		<span></span>
+	</div>
+	<ul>
+		<li>Kreiraj rezervaciju</li>
+		<li>Moje rezervacije</li>
+		<li id="podaci">Moji podaci</li>
+		<li id="odjava">Logout</li>
+	</ul>
+</div>
+
+<div id="podaciDiv" style="width: 400px; height: 800px;margin-left: 450px; margin-right: 220px;">
+		
+	</div>
+	
 	
 
 </body>

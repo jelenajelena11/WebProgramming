@@ -7,6 +7,13 @@
 	font-family:sans-serif;
 }
 
+h1{
+	
+	float:right;
+	padding-top: 15px;
+	padding-right: 670px;
+}
+
 #sidebar{
 	
 	position:fixed;

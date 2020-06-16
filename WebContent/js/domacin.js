@@ -8,9 +8,10 @@ $(document).ready(function(){
 	});
 	
 	$('#apartmani').click(prikaziApartmane());
+	$('#pregledKorisnika').click(prikaziKorisnike());
 	
 })
-	
+
 function dodaj(){
 	return function(event){
 		event.preventDefault();
@@ -22,6 +23,38 @@ function dodaj(){
 			}
 		});
 	}
+}
+
+function prikaziKorisnike(){
+	
+	return function(event){
+		event.preventDefault();
+		
+		$.ajax({
+			url: 'rest/user/korisnik',
+			type: 'GET',
+			contentType : 'application/json',
+			success : function(users){
+				for(let user of users){
+					console.log(user);
+					ispisiKorisnike(user);
+				}
+			}
+		});
+	}
+}
+
+function ispisiKorisnike(user){
+	
+	let div = $('#korisniciDIV');
+	let div2 = $('<div height:2000px; margin-top: 300px;"></div>');
+	//let userName = $('<h4>Username: </h4'+user.getUserName);
+	//let ime = $('<h4>Ime: </h4>'+user.getFirstName);
+	let naziv = $('<h3>Pregled svih korisnika:</h3>')
+	let tabela = $('<table><tr><th> Username: </th> <th>'+user.userName+' </th></tr><tr><th>Ime:</th><th>'+user.firstName+'</th></tr><tr><th> Prezime:</th><th>'+user.lastName+'</th></tr><tr><th>Pol: </th><th>'+user.gender+' </th></tr><tr><th> Lozinka: </th><th>'+user.password+'</th></tr></table>');
+	
+	div2.append(naziv).append(tabela);
+	div.append(div2);
 }
 
 //************************************************************************************************8
