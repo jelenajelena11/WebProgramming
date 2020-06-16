@@ -2,6 +2,7 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import dao.UserDAO;
+import model.Apartman;
 import model.User;
 
 @Path("/user")
@@ -60,5 +62,22 @@ public class UserService {
 		}
 		
 		return usersArray;
+	}
+	
+	@GET
+	@Path("/apartman")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getDomacinApartman(@Context HttpServletRequest request) {
+		User loggedIn = (User) request.getSession().getAttribute("user");
+		List<Apartman> aktivni = new ArrayList<Apartman>();
+		
+		for(Apartman a : loggedIn.getApartmaniZaIznajmljivanje()) {
+			if(a.getStatus() == 0) {									//DOBAVLJA SAMO AKTIVNE APARTMANE
+				aktivni.add(a);		
+			}
+		}
+		
+		return Response.ok(aktivni).build();
 	}
 }

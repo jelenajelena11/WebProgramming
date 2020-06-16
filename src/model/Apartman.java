@@ -1,31 +1,79 @@
 package model;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-public class Apartman {
+public class Apartman implements Serializable{
 
 	private UUID id;
 	private int tipSobe; //0 - Ceo apartman; 1 - Soba
 	private int brojSoba;
 	private int brojGostiju;
 	private Lokacija lokacija;
-	private Date datePocetakVazenja;
-	private Date krajPocetakVazenja;
+	private LocalDate datePocetakVazenja;
+	private LocalDate krajPocetakVazenja;
 	
 	private User domacin;
 	private List<Komentar> komentari = new ArrayList<Komentar>();
 	private String slika;	//Putanja samo 1 slike
 	private int cenaPoNoci;
-	private Date vremeZaPrijavu;
-	private Date vremeZaOdjavu;
+	private LocalTime vremeZaPrijavu;
+	private LocalTime vremeZaOdjavu;
 	private int status;			//0 - Aktivan; 1 - Neaktivan
 	
 	private List<SadrzajApartmana> sadrzajApartmana = new ArrayList<SadrzajApartmana>();
 	private List<Rezervacija> rezervacije = new ArrayList<Rezervacija>();
 	
+	public Apartman(int tipSobe, int brojSoba, int brojGostiju, Lokacija lokacija,
+			LocalDate datePocetakVazenja, LocalDate krajPocetakVazenja, User domacin, List<Komentar> komentari,
+			String slika, int cenaPoNoci, LocalTime vremeZaPrijavu, LocalTime vremeZaOdjavu, int status,
+			List<SadrzajApartmana> sadrzajApartmana, List<Rezervacija> rezervacije) {
+		super();
+		this.id = UUID.randomUUID();
+		this.tipSobe = tipSobe;
+		this.brojSoba = brojSoba;
+		this.brojGostiju = brojGostiju;
+		this.lokacija = lokacija;
+		this.datePocetakVazenja = datePocetakVazenja;
+		this.krajPocetakVazenja = krajPocetakVazenja;
+		this.domacin = domacin;
+		this.komentari = komentari;
+		this.slika = slika;
+		this.cenaPoNoci = cenaPoNoci;
+		this.vremeZaPrijavu = vremeZaPrijavu;
+		this.vremeZaOdjavu = vremeZaOdjavu;
+		this.status = status;
+		this.sadrzajApartmana = sadrzajApartmana;
+		this.rezervacije = rezervacije;
+	}
+	
+	public Apartman(UUID id, int tipSobe, int brojSoba, int brojGostiju, Lokacija lokacija,
+			LocalDate datePocetakVazenja, LocalDate krajPocetakVazenja, User domacin, List<Komentar> komentari,
+			String slika, int cenaPoNoci, LocalTime vremeZaPrijavu, LocalTime vremeZaOdjavu, int status,
+			List<SadrzajApartmana> sadrzajApartmana, List<Rezervacija> rezervacije) {
+		super();
+		this.id = id;
+		this.tipSobe = tipSobe;
+		this.brojSoba = brojSoba;
+		this.brojGostiju = brojGostiju;
+		this.lokacija = lokacija;
+		this.datePocetakVazenja = datePocetakVazenja;
+		this.krajPocetakVazenja = krajPocetakVazenja;
+		this.domacin = domacin;
+		this.komentari = komentari;
+		this.slika = slika;
+		this.cenaPoNoci = cenaPoNoci;
+		this.vremeZaPrijavu = vremeZaPrijavu;
+		this.vremeZaOdjavu = vremeZaOdjavu;
+		this.status = status;
+		this.sadrzajApartmana = sadrzajApartmana;
+		this.rezervacije = rezervacije;
+	}
+
 	public Apartman() {
 		this.id = UUID.randomUUID();
 	}
@@ -70,22 +118,36 @@ public class Apartman {
 		this.lokacija = lokacija;
 	}
 
-	
-
-	public Date getDatePocetakVazenja() {
+	public LocalDate getDatePocetakVazenja() {
 		return datePocetakVazenja;
 	}
 
-	public void setDatePocetakVazenja(Date datePocetakVazenja) {
+	public void setDatePocetakVazenja(LocalDate datePocetakVazenja) {
 		this.datePocetakVazenja = datePocetakVazenja;
 	}
 
-	public Date getKrajPocetakVazenja() {
+	public LocalDate getKrajPocetakVazenja() {
 		return krajPocetakVazenja;
 	}
 
-	public void setKrajPocetakVazenja(Date krajPocetakVazenja) {
+	public void setKrajPocetakVazenja(LocalDate krajPocetakVazenja) {
 		this.krajPocetakVazenja = krajPocetakVazenja;
+	}
+
+	public LocalTime getVremeZaPrijavu() {
+		return vremeZaPrijavu;
+	}
+
+	public void setVremeZaPrijavu(LocalTime vremeZaPrijavu) {
+		this.vremeZaPrijavu = vremeZaPrijavu;
+	}
+
+	public LocalTime getVremeZaOdjavu() {
+		return vremeZaOdjavu;
+	}
+
+	public void setVremeZaOdjavu(LocalTime vremeZaOdjavu) {
+		this.vremeZaOdjavu = vremeZaOdjavu;
 	}
 
 	public User getDomacin() {
@@ -120,21 +182,6 @@ public class Apartman {
 		this.cenaPoNoci = cenaPoNoci;
 	}
 
-	public Date getVremeZaPrijavu() {
-		return vremeZaPrijavu;
-	}
-
-	public void setVremeZaPrijavu(Date vremeZaPrijavu) {
-		this.vremeZaPrijavu = vremeZaPrijavu;
-	}
-
-	public Date getVremeZaOdjavu() {
-		return vremeZaOdjavu;
-	}
-
-	public void setVremeZaOdjavu(Date vremeZaOdjavu) {
-		this.vremeZaOdjavu = vremeZaOdjavu;
-	}
 
 	public int getStatus() {
 		return status;
