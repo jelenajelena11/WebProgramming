@@ -1,23 +1,26 @@
 package dao;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import model.Rezervacija;
 
 public class RezervacijaDAO {
 
-	private HashMap<String, Rezervacija> users = new HashMap<String, Rezervacija>();
+	private HashMap<UUID, Rezervacija> rezervacije = new HashMap<UUID, Rezervacija>();
 	
 	public RezervacijaDAO() {
 	
 	}
 
-	public HashMap<String, Rezervacija> getUsers() {
-		return users;
+	public HashMap<UUID, Rezervacija> getRezervacije() {
+		return rezervacije;
 	}
 
-	public void setUsers(HashMap<String, Rezervacija> users) {
-		this.users = users;
+	public void setRezervacije(HashMap<UUID, Rezervacija> rezervacije) {
+		this.rezervacije = rezervacije;
 	}
+
+	
 	
 }

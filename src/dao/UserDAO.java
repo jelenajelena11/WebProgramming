@@ -23,9 +23,9 @@ public class UserDAO {
 		Lokacija l2 = new Lokacija(15L, 12L, new Adresa("Bulevar Oslobodjenja", 14, "Novi Sad", 21000));
 		Lokacija l3 = new Lokacija(16L, 14L, new Adresa("Ulica", 14, "Beograd", 23000));
 		
-		Apartman a = new Apartman(0, 2, 2, l, LocalDate.now(), LocalDate.now().plusDays(3), null, null, "./assets/img/rent.jpg", 50, 
+		Apartman a = new Apartman(0, 2, 2, l, LocalDate.of(2020, 6, 28), LocalDate.of(2020, 7, 22), null, null, "./assets/img/rent.jpg", 50, 
 						LocalTime.now(), LocalTime.now().plusHours(3), 0, null, null);
-		Apartman a2 = new Apartman(0, 2, 2, l2, LocalDate.now(), LocalDate.now().plusDays(3), null, null, "./assets/img/rent.jpg", 50, 
+		Apartman a2 = new Apartman(0, 2, 2, l2, LocalDate.of(2020, 6, 11), LocalDate.of(2020, 8, 7), null, null, "./assets/img/rent.jpg", 50, 
 				LocalTime.now(), LocalTime.now().plusHours(3), 0, null, null);
 		
 		jela.getApartmaniZaIznajmljivanje().add(a);

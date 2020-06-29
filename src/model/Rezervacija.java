@@ -1,13 +1,14 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
 public class Rezervacija {
 
 	private UUID id;
-	private Apartman apartman;
-	private Date pocetakIznajmljivanja;
+	private UUID apartman;
+	private String pocetakIznajmljivanja;
 	private int brojNocenja = 1;
 	private int ukupnaCena;
 	private String poruka;
@@ -19,7 +20,21 @@ public class Rezervacija {
 	public Rezervacija() {
 	
 	}
-	public Rezervacija(UUID id, Apartman apartman, Date pocetakIznajmljivanja, int brojNocenja,
+	
+	public Rezervacija(UUID apartman, String pocetakIznajmljivanja, int brojNocenja,
+			int ukupnaCena, String poruka, User gost, int status) {
+		super();
+		this.id = UUID.randomUUID();
+		this.apartman = apartman;
+		this.pocetakIznajmljivanja = pocetakIznajmljivanja;
+		this.brojNocenja = brojNocenja;
+		this.ukupnaCena = ukupnaCena;
+		this.poruka = poruka;
+		this.gost = gost;
+		this.status = status;
+	}
+	
+	public Rezervacija(UUID id, UUID apartman, String pocetakIznajmljivanja, int brojNocenja,
 			int ukupnaCena, String poruka, User gost, int status) {
 		super();
 		this.id = id;
@@ -31,23 +46,24 @@ public class Rezervacija {
 		this.gost = gost;
 		this.status = status;
 	}
+	
 	public UUID getId() {
 		return id;
 	}
 	public void setId(UUID id) {
 		this.id = id;
 	}
-	public Apartman getApartman() {
+	public UUID getApartman() {
 		return apartman;
 	}
-	public void setApartman(Apartman apartman) {
+	public void setApartman(UUID apartman) {
 		this.apartman = apartman;
 	}
-	public Date getPocetakIznajmljivanja() {
+	public String getPocetakIznajmljivanja() {
 		return pocetakIznajmljivanja;
 	}
-	public void setPocetakIznajmljivanja(Date pocetakIznajmljivanja) {
-		this.pocetakIznajmljivanja = pocetakIznajmljivanja;
+	public void setPocetakIznajmljivanja(String pocetakIznajmljivanja) {
+		this.pocetakIznajmljivanja = pocetakIznajmljivanja;	
 	}
 	public int getBrojNocenja() {
 		return brojNocenja;
