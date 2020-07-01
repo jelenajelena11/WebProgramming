@@ -21,22 +21,24 @@ public class ApartmanDAO {
 		
 		UUID id1 = UUID.randomUUID();
 		UUID id2 = UUID.randomUUID();
+		UUID id3 = UUID.randomUUID();
 		
 		User jela = new User("Jela", "goran", "Jelena", "Stojanovic", "jela@gmail.com", "Novi Sad", "F", 2);
 		
 		Lokacija l = new Lokacija(14L, 12L, new Adresa("Djordja Jovanovica", 14, "Novi Sad", 21000));
 		Lokacija l2 = new Lokacija(15L, 12L, new Adresa("Bulevar Oslobodjenja", 14, "Novi Sad", 21000));
+		Lokacija l3 = new Lokacija(15L, 12L, new Adresa("Vuka Karadzica", 14, "Bijeljina", 21000));
 		
-		List<Rezervacija> r1 = new ArrayList<Rezervacija>();
-		List<Rezervacija> r2 = new ArrayList<Rezervacija>();
-		
-		Apartman a = new Apartman(id1, 0, 2, 2, l, LocalDate.of(2020, 6, 28), LocalDate.of(2020, 7, 22), jela, null, "./assets/img/rent.jpg", 50, 
-						LocalTime.now(), LocalTime.now().plusHours(3), 0, null, null);
-		Apartman a2 = new Apartman(id2, 0, 2, 2, l2, LocalDate.of(2020, 6, 11), LocalDate.of(2020, 8, 7), jela, null, "./assets/img/rent.jpg", 50, 
-				LocalTime.now(), LocalTime.now().plusHours(3), 0, null, null);
+		Apartman a = new Apartman(id1, 0, 2, 2, l, "2020-06-28", "2020-07-22", jela, null, "./assets/img/rent.jpg", 50, 
+				"14:00", "10:00", 0, null, null);
+		Apartman a2 = new Apartman(id2, 0, 2, 2, l2, "2020-06-11", "2020-08-07", jela, null, "./assets/img/rent.jpg", 50, 
+				"15:00", "9:00", 0, null, null);
+		Apartman a3 = new Apartman(id3, 0, 2, 2, l3, "2020-06-21", "2020-08-17", jela, null, "./assets/img/rent.jpg", 50, 
+				"12:00", "10:00", 0, null, null);
 		
 		this.apartmani.put(id1, a);
 		this.apartmani.put(id2, a2);
+		this.apartmani.put(id3, a3);
 	}
 
 	public HashMap<UUID, Apartman> getApartmani() {

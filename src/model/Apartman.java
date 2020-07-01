@@ -14,23 +14,23 @@ public class Apartman implements Serializable{
 	private int brojSoba;
 	private int brojGostiju;
 	private Lokacija lokacija;
-	private LocalDate datePocetakVazenja;
-	private LocalDate krajPocetakVazenja;
+	private String datePocetakVazenja;
+	private String krajPocetakVazenja;
 	
 	private User domacin;
 	private List<Komentar> komentari = new ArrayList<Komentar>();
 	private String slika;	//Putanja samo 1 slike
 	private int cenaPoNoci;
-	private LocalTime vremeZaPrijavu;
-	private LocalTime vremeZaOdjavu;
+	private String vremeZaPrijavu;
+	private String vremeZaOdjavu;
 	private int status;			//0 - Aktivan; 1 - Neaktivan
 	
 	private List<SadrzajApartmana> sadrzajApartmana = new ArrayList<SadrzajApartmana>();
 	private List<Rezervacija> rezervacije = new ArrayList<Rezervacija>();
 	
 	public Apartman(int tipSobe, int brojSoba, int brojGostiju, Lokacija lokacija,
-			LocalDate datePocetakVazenja, LocalDate krajPocetakVazenja, User domacin, List<Komentar> komentari,
-			String slika, int cenaPoNoci, LocalTime vremeZaPrijavu, LocalTime vremeZaOdjavu, int status,
+			String datePocetakVazenja, String krajPocetakVazenja, User domacin, List<Komentar> komentari,
+			String slika, int cenaPoNoci, String vremeZaPrijavu, String vremeZaOdjavu, int status,
 			List<SadrzajApartmana> sadrzajApartmana, List<Rezervacija> rezervacije) {
 		super();
 		this.id = UUID.randomUUID();
@@ -52,8 +52,8 @@ public class Apartman implements Serializable{
 	}
 	
 	public Apartman(UUID id, int tipSobe, int brojSoba, int brojGostiju, Lokacija lokacija,
-			LocalDate datePocetakVazenja, LocalDate krajPocetakVazenja, User domacin, List<Komentar> komentari,
-			String slika, int cenaPoNoci, LocalTime vremeZaPrijavu, LocalTime vremeZaOdjavu, int status,
+			String datePocetakVazenja, String krajPocetakVazenja, User domacin, List<Komentar> komentari,
+			String slika, int cenaPoNoci, String vremeZaPrijavu, String vremeZaOdjavu, int status,
 			List<SadrzajApartmana> sadrzajApartmana, List<Rezervacija> rezervacije) {
 		super();
 		this.id = id;
@@ -133,35 +133,35 @@ public class Apartman implements Serializable{
 		this.lokacija = lokacija;
 	}
 
-	public LocalDate getDatePocetakVazenja() {
+	public String getDatePocetakVazenja() {
 		return datePocetakVazenja;
 	}
 
-	public void setDatePocetakVazenja(LocalDate datePocetakVazenja) {
+	public void setDatePocetakVazenja(String datePocetakVazenja) {
 		this.datePocetakVazenja = datePocetakVazenja;
 	}
 
-	public LocalDate getKrajPocetakVazenja() {
+	public String getKrajPocetakVazenja() {
 		return krajPocetakVazenja;
 	}
 
-	public void setKrajPocetakVazenja(LocalDate krajPocetakVazenja) {
+	public void setKrajPocetakVazenja(String krajPocetakVazenja) {
 		this.krajPocetakVazenja = krajPocetakVazenja;
 	}
 
-	public LocalTime getVremeZaPrijavu() {
+	public String getVremeZaPrijavu() {
 		return vremeZaPrijavu;
 	}
 
-	public void setVremeZaPrijavu(LocalTime vremeZaPrijavu) {
+	public void setVremeZaPrijavu(String vremeZaPrijavu) {
 		this.vremeZaPrijavu = vremeZaPrijavu;
 	}
 
-	public LocalTime getVremeZaOdjavu() {
+	public String getVremeZaOdjavu() {
 		return vremeZaOdjavu;
 	}
 
-	public void setVremeZaOdjavu(LocalTime vremeZaOdjavu) {
+	public void setVremeZaOdjavu(String vremeZaOdjavu) {
 		this.vremeZaOdjavu = vremeZaOdjavu;
 	}
 

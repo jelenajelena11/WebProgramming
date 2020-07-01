@@ -1,5 +1,7 @@
 $(document).ready(function(){
 	
+	document.getElementById('searchDiv').style.visibility = "hidden";
+	
 	$('#podaciDiv').html('');
 	
 	$('#odjava').click(logout());
@@ -10,6 +12,18 @@ $(document).ready(function(){
 														//zbog modela. Ako bude, izmjeniti modele
 	
 	$('#pendingRezervacije').click(pendingRezervacije());
+	
+	$('#pretrazi').click(pretraziApartmane());
+	
+	//*************************************************************
+	//Datepicker
+	$('#inputDolazak').datepicker({
+		format: "yyyy-mm-dd"
+	});
+	$('#inputOdlazak').datepicker({
+		format: "yyyy-mm-dd"
+	});
+	//**************************************************************
 })
 
 function logout(){
@@ -43,6 +57,8 @@ function prikaziPodatke(){
 					console.log(user);
 					ispisiMojePodatke(user);
 				}
+				
+				document.getElementById('searchDiv').style.visibility = "hidden";
 			}
 		});
 	}
@@ -80,6 +96,7 @@ function prikaziApartmane(){
 					console.log(res);		
 					ispisiApartmane(res);
 				}
+				document.getElementById('searchDiv').style.visibility = "visible";
 			},
 			error : function(){
 				alert('Ups, nije vratio apartmane');
@@ -126,10 +143,10 @@ function ispisiTerminDatuma(apartman){
 	let termini = $('<div style="float: left"></div>');
 	
 	let vaziOd = $('<h3><i> Vazi od: </i></h3>');
-	let datePocetakVazenja = $('<h3>' + apartman.datePocetakVazenja.dayOfMonth + '-' + apartman.datePocetakVazenja.monthValue + '-' + apartman.datePocetakVazenja.year + '</h3>');
+	let datePocetakVazenja = $('<h3>' + apartman.datePocetakVazenja + '</h3>');
 	
 	let vaziDo = $('<h3><i> Vazi do: </i></h3>');
-	let krajPocetakVazenja = $('<h3>' + apartman.krajPocetakVazenja.dayOfMonth + '-' + apartman.krajPocetakVazenja.monthValue + '-' + apartman.krajPocetakVazenja.year + '</h3>');
+	let krajPocetakVazenja = $('<h3>' + apartman.krajPocetakVazenja + '</h3>');
 	
 	let vreme = ispisiTerminPrijave(apartman);
 	
@@ -144,10 +161,10 @@ function ispisiTerminPrijave(apartman){
 	let termini = $('<div></div>');
 	
 	let prijava = $('<h3><i> Prijava: </i></h3>');
-	let vremePrijave = $('<h3>' + apartman.vremeZaPrijavu.hour + ':' + apartman.vremeZaPrijavu.minute + '</h3>');
+	let vremePrijave = $('<h3>' + apartman.vremeZaPrijavu + '</h3>');
 	
 	let odjava = $('<h3><i> Odjava: </i></h3>');
-	let vremeOdjave = $('<h3>' + apartman.vremeZaOdjavu.hour + ':' + apartman.vremeZaOdjavu.minute + '</h3>');
+	let vremeOdjave = $('<h3>' + apartman.vremeZaOdjavu + '</h3>');
 	
 	termini.append(prijava).append(vremePrijave).append(odjava).append(vremeOdjave);
 	vreme.append(termini);
@@ -282,6 +299,7 @@ function pendingRezervacije(){
 					console.log(res);
 					ispisiApartmanRezervacija(res);
 				}
+				document.getElementById('searchDiv').style.visibility = "hidden";
 			},
 			error : function(response){
 				console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
@@ -365,4 +383,82 @@ function odustaniOdRezervacije(rezervacija){
 			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
 		}
 	});
+}
+
+//*********************************************************************************************************
+//Pretraga
+function pretraziApartmane(){
+	return function(event){
+		event.preventDefault();
+		
+		$('#podaciDiv').html('');
+		
+		var mesto;
+		var cena;
+		
+		var mestoElem = document.getElementById('inputMesto').value;
+		if(mestoElem == undefined || mestoElem == null){
+			mesto = "";
+		}else{
+			mesto = mestoElem;
+		}
+		var cena;
+		var cenaElem = document.getElementById('inputCena').value;
+		if(cenaElem == undefined || cenaElem == null){
+			cena = "";
+		}else{
+			cena = cenaElem; 
+		}
+		
+		var dolazak;
+		var dolazakElem = document.getElementById('inputDolazak').value;
+		if(dolazakElem == undefined || dolazakElem == null){
+			dolazak = "";
+		}else{
+			dolazak = dolazakElem; 
+		}
+		
+		var odlazak;
+		var odlazakElem = document.getElementById('inputOdlazak').value;
+		if(odlazakElem == undefined || odlazakElem == null){
+			odlazak = "";
+		}else{
+			odlazak = odlazakElem; 
+		}
+		
+		var brojSoba;
+		var brojSobaElem = document.getElementById('inputBrojSoba').value;
+		if(brojSobaElem == undefined || brojSobaElem == null){
+			brojSoba = "";
+		}else{
+			brojSoba = brojSobaElem; 
+		}
+		
+		var brojGostiju;
+		var brojGostijuElem = document.getElementById('inputBrojGostiju').value;
+		if(brojGostijuElem == undefined || brojGostijuElem == null){
+			brojGostiju = "";
+		}else{
+			brojGostiju = brojGostijuElem; 
+		}
+		
+		var obj = {"mesto": mesto, "cena": cena, "dolazak": dolazak, "odlazak": odlazak, "brojSoba": brojSoba,
+							"brojGostiju": brojGostiju};
+		
+		$.ajax({
+			url: 'rest/apartman/search',
+			type: 'POST',
+			contentType : 'application/json',
+			data: JSON.stringify(obj),
+			success : function(response){
+				for(let res of response){
+					console.log(res);
+					ispisiApartmane(res);
+				}
+			},
+			error : function(response){
+				console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+			}
+		});
+	}
 }

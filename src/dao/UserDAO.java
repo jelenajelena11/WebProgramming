@@ -1,8 +1,14 @@
 package dao;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import model.Adresa;
 import model.Apartman;
@@ -23,10 +29,10 @@ public class UserDAO {
 		Lokacija l2 = new Lokacija(15L, 12L, new Adresa("Bulevar Oslobodjenja", 14, "Novi Sad", 21000));
 		Lokacija l3 = new Lokacija(16L, 14L, new Adresa("Ulica", 14, "Beograd", 23000));
 		
-		Apartman a = new Apartman(0, 2, 2, l, LocalDate.of(2020, 6, 28), LocalDate.of(2020, 7, 22), null, null, "./assets/img/rent.jpg", 50, 
-						LocalTime.now(), LocalTime.now().plusHours(3), 0, null, null);
-		Apartman a2 = new Apartman(0, 2, 2, l2, LocalDate.of(2020, 6, 11), LocalDate.of(2020, 8, 7), null, null, "./assets/img/rent.jpg", 50, 
-				LocalTime.now(), LocalTime.now().plusHours(3), 0, null, null);
+		Apartman a = new Apartman(0, 2, 2, l, "2020-06-28", "2020-07-22", null, null, "./assets/img/rent.jpg", 50, 
+						"14:00", "10:00", 0, null, null);
+		Apartman a2 = new Apartman(0, 2, 2, l2, "2020-06-11", "2020-08-07", null, null, "./assets/img/rent.jpg", 50, 
+				"15:00", "9:00", 0, null, null);
 		
 		jela.getApartmaniZaIznajmljivanje().add(a);
 		jela.getApartmaniZaIznajmljivanje().add(a2);
@@ -34,6 +40,8 @@ public class UserDAO {
 		this.users.put("Goku", admin);
 		this.users.put("Jela", jela);
 		this.users.put("Korisnik", korisnik);
+		
+		//this.saveUsers("");
 	}
 	
 	public HashMap<String, User> getUsers(){
@@ -62,5 +70,30 @@ public class UserDAO {
 			return true;
 		}
 		return false;
+	}
+	
+	public void saveUsers(String contextPath) {
+		File f = new File(contextPath + "/users.txt");
+		FileWriter fileWriter = null;
+		try {
+			fileWriter = new FileWriter(f);
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+			objectMapper.getFactory().configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
+			String sUsers = objectMapper.writeValueAsString(users);
+			fileWriter.write(sUsers);
+			fileWriter.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if (fileWriter != null) {
+				try {
+					fileWriter.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }

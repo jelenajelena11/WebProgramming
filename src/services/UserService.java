@@ -15,8 +15,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import dao.ApartmanDAO;
 import dao.UserDAO;
 import model.Apartman;
+import model.Rezervacija;
 import model.User;
 
 @Path("/user")
@@ -29,6 +31,9 @@ public class UserService {
 	public void init() {
 		if(ctx.getAttribute("userDAO") == null) {
 			ctx.setAttribute("userDAO", new UserDAO());
+		}
+		if(ctx.getAttribute("apartmanDAO") == null) {
+			ctx.setAttribute("apartmanDAO", new ApartmanDAO());
 		}
 	}
 	
@@ -80,6 +85,38 @@ public class UserService {
 		
 		return Response.ok(aktivni).build();
 	}
+	
+	@GET
+	@Path("/apartman/rezervacija/kreiran")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getDomacinApartmanRezervacije(@Context HttpServletRequest request) {
+		User loggedIn = (User) request.getSession().getAttribute("user");
+		ApartmanDAO apartmani = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
+		
+		List<Apartman> aktivniPending = new ArrayList<Apartman>();
+		
+		for(Apartman a : apartmani.getApartmani().values()) {
+			if(a.getDomacin().getUserName().equals(loggedIn.getUserName())) {
+				if(a.getStatus() == 0) {									//DOBAVLJA SAMO AKTIVNE APARTMANE
+					Apartman newApartman = new Apartman(a);
+					System.out.println("Apartman je: ");
+					System.out.println(a);
+					if(a.getRezervacije() != null) {
+						for(Rezervacija r : a.getRezervacije()) {
+							if(r.getStatus() == 0) {						//DOBAVLJA SAMO KREIRANE REZERVACIJE
+								newApartman.getRezervacije().add(r);
+							}
+						}
+						aktivniPending.add(newApartman);
+					}
+				}
+			}
+		}
+		System.out.println(aktivniPending);
+		return Response.ok(aktivniPending).build();
+	}
+	
 	
 	
 }

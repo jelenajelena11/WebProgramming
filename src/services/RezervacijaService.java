@@ -114,8 +114,6 @@ public class RezervacijaService {
 	public Response odustaniRezervacija(@Context HttpServletRequest request, Rezervacija rezervacijaOdustanak) {
 		
 		User user = (User) request.getSession().getAttribute("user");
-		ApartmanDAO apartmani = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
-		RezervacijaDAO rezervacije = (RezervacijaDAO) ctx.getAttribute("rezervacijaDAO");
 		
 		for(Rezervacija r : user.getZakazaneRezervacije()) {
 			if(r.getId().equals(rezervacijaOdustanak.getId())) {
@@ -124,11 +122,46 @@ public class RezervacijaService {
 			}
 		}
 		
-//		Rezervacija r = rezervacije.getRezervacije().get(rezervacijaOdustanak.getId());
-//		System.out.println("Rezervacija u bazi je: " + r.getStatus());
+		return Response.status(200).build();
+	}
+	
+	@POST
+	@Path("/odbij")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response odbijRezervacija(@Context HttpServletRequest request, Rezervacija rezervacijaOdbij) {
 		
+		User user = (User) request.getSession().getAttribute("user");
+		
+		for(Rezervacija r : user.getZakazaneRezervacije()) {
+			if(r.getId().equals(rezervacijaOdbij.getId())) {
+				r.setStatus(1);
+				System.out.println("Novi status je: " + r.getStatus());
+			}
+		}
 		
 		return Response.status(200).build();
+	}
+	
+	@POST
+	@Path("/prihvati")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response prihvatiRezervacija(@Context HttpServletRequest request, Rezervacija rezervacijaPrihvati) {
 		
+		User user = (User) request.getSession().getAttribute("user");
+		RezervacijaDAO rezervacije = (RezervacijaDAO) ctx.getAttribute("rezervacijaDAO");
+		
+		for(Rezervacija r : user.getZakazaneRezervacije()) {
+			if(r.getId().equals(rezervacijaPrihvati.getId())) {
+				r.setStatus(3);
+				System.out.println("Novi status je: " + r.getStatus());
+			}
+		}
+		
+		Rezervacija rez = rezervacije.getRezervacije().get(rezervacijaPrihvati.getId());
+		System.out.println("Id prihvacene rez je: " + rez.getStatus());
+		
+		return Response.status(200).build();
 	}
 }
