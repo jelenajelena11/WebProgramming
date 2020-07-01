@@ -2,12 +2,15 @@ package dao;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import model.Adresa;
 import model.Apartman;
 import model.Lokacija;
+import model.Rezervacija;
 import model.User;
 
 public class ApartmanDAO {
@@ -23,6 +26,9 @@ public class ApartmanDAO {
 		
 		Lokacija l = new Lokacija(14L, 12L, new Adresa("Djordja Jovanovica", 14, "Novi Sad", 21000));
 		Lokacija l2 = new Lokacija(15L, 12L, new Adresa("Bulevar Oslobodjenja", 14, "Novi Sad", 21000));
+		
+		List<Rezervacija> r1 = new ArrayList<Rezervacija>();
+		List<Rezervacija> r2 = new ArrayList<Rezervacija>();
 		
 		Apartman a = new Apartman(id1, 0, 2, 2, l, LocalDate.of(2020, 6, 28), LocalDate.of(2020, 7, 22), jela, null, "./assets/img/rent.jpg", 50, 
 						LocalTime.now(), LocalTime.now().plusHours(3), 0, null, null);

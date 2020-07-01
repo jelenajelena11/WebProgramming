@@ -73,6 +73,21 @@ public class Apartman implements Serializable{
 		this.sadrzajApartmana = sadrzajApartmana;
 		this.rezervacije = rezervacije;
 	}
+	
+	public Apartman(Apartman a) {
+		this.id = a.getId();
+		this.tipSobe = a.getTipSobe();
+		this.brojSoba = a.getBrojSoba();
+		this.datePocetakVazenja = a.getDatePocetakVazenja();
+		this.krajPocetakVazenja = a.getKrajPocetakVazenja();
+		this.slika = a.getSlika();
+		this.cenaPoNoci = a.getCenaPoNoci();
+		this.status = a.getStatus();
+		this.vremeZaPrijavu = a.getVremeZaPrijavu();
+		this.vremeZaOdjavu = a.getVremeZaOdjavu();
+		this.lokacija = a.getLokacija();
+		//this.rezervacije = a.getRezervacije();
+	}
 
 	public Apartman() {
 		this.id = UUID.randomUUID();

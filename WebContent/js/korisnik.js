@@ -8,6 +8,8 @@ $(document).ready(function(){
 	
 	$('#apartmani').click(prikaziApartmane());			//Moguce je da ce eventualno biti greska 
 														//zbog modela. Ako bude, izmjeniti modele
+	
+	$('#pendingRezervacije').click(pendingRezervacije());
 })
 
 function logout(){
@@ -249,6 +251,110 @@ function kreirajRezervaciju(pocetakIznajmljivanja, daniInput, porukaDomacinu, ap
 	
 	$.ajax({
 		url: 'rest/rezervacija',
+		type: 'POST',
+		contentType : 'application/json',
+		data: JSON.stringify(obj),
+		success : function(response){
+			console.log('Odgovor servisa je:' + response);
+		},
+		error : function(response){
+			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+		}
+	});
+}
+//***********************************************************************************************
+
+//Prikaz rezervacija gosta
+function pendingRezervacije(){
+
+	return function(event){
+		event.preventDefault();
+		
+		console.log('Usao u prendingRezervacije function.');
+		$('#podaciDiv').html('');
+		
+		$.ajax({
+			url: 'rest/rezervacija',
+			type: 'GET',
+			contentType : 'application/json',
+			success : function(response){
+				for(let res of response){
+					console.log(res);
+					ispisiApartmanRezervacija(res);
+				}
+			},
+			error : function(response){
+				console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+			}
+		});
+	}
+}
+
+function ispisiApartmanRezervacija(apartman){
+	let original = $('#podaciDiv');
+	let divRez = $('<div style="border-style: solid; border-width: medium; margin-top: 20px; background-color: rgb(190, 188, 255);"></div>');
+	
+	let podaciRez = ispisiPodatkeApartmanRezervacijaDIV(apartman);
+	let slikaRez = ispisiSlikuDIV(apartman);
+	let datumVazenjaRez = ispisiTerminDatuma(apartman);
+	
+	let lokacijaRez = ispisiLokaciju(apartman);
+	//let button = ispisiButton(apartman);
+	//let rezervacija = ispisiRezervacijaZakazivanje(apartman);
+	let ispisPodaciRez = ispisiPodatkeRezervacije(apartman);
+	
+	divRez.append(podaciRez).append(datumVazenjaRez).append(slikaRez).append(lokacijaRez).append(ispisPodaciRez);//.append(rezervacija).append(button);
+	
+	original.append(divRez);
+}
+
+function ispisiPodatkeApartmanRezervacijaDIV(apartman){
+
+	let podaci = $('<div style="margin-left: 20px; margin-right: 20px;background-color: aqua;"></div>');
+	
+	let tipSobeApartmana = provjeriApartman(apartman);
+	let tipSobe = $('<h2> <i> Apartman: </i>' + tipSobeApartmana + '</h2>');
+	let brojSoba = $('<h2> <i> Broj Soba: </i>' + apartman.brojSoba +'</h2>');
+	let cenaPoNoci = $('<h2> <i> Cena po noci: </i>' + apartman.cenaPoNoci +' <b> <i>$</i> </b></h2>');
+	
+	podaci.append(tipSobe).append(brojSoba).append(cenaPoNoci);
+	return podaci;
+}
+
+function ispisiPodatkeRezervacije(apartman){
+	let divRez = $('<div style="margin-left: 20px; margin-right: 20px; border-top: solid;background-color: aqua; padding-left: 20px"></div>');
+	
+	for(let rezervacija of apartman.rezervacije){
+		let rezResult = ispisiRezervaciju(rezervacija);
+		divRez.append(rezResult);
+	}
+	
+	return divRez;
+}
+
+function ispisiRezervaciju(rezervacija){
+	let divRezervacija = $('<div style="border-bottom: solid;"> </div>');
+	
+	let datumRezervacija = $('<h4> <i>Datum rezervacije: </i>' + rezervacija.pocetakIznajmljivanja + '</h4>');
+	let brojNocenja = $('<h4> <i>Broj nocenja: </i>' + rezervacija.brojNocenja + '</h4>');
+	let ukupnaCena = $('<h4> <i>Ukupna cena: <i>' + rezervacija.ukupnaCena + ' <b> <i>$</i> </b></h4>');
+
+	let buttonOdustani = $('<button>Odustani od rezervacije</button>');
+	buttonOdustani.on('click', function(event){
+		odustaniOdRezervacije(rezervacija);
+	});
+	
+	divRezervacija.append(datumRezervacija).append(brojNocenja).append(ukupnaCena).append(buttonOdustani);
+	
+	return divRezervacija;
+}
+
+function odustaniOdRezervacije(rezervacija){
+	
+	var obj = { "id": rezervacija.id};
+	
+	$.ajax({
+		url: 'rest/rezervacija/odustanak',
 		type: 'POST',
 		contentType : 'application/json',
 		data: JSON.stringify(obj),

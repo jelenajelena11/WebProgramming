@@ -1,11 +1,14 @@
 package services;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -41,6 +44,7 @@ public class RezervacijaService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createRezervacija(@Context HttpServletRequest request, Rezervacija newRezervacija) {
+		
 		User user = (User) request.getSession().getAttribute("user");
 		ApartmanDAO apartmani = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
 		RezervacijaDAO rezervacije = (RezervacijaDAO) ctx.getAttribute("rezervacijaDAO");
@@ -50,18 +54,81 @@ public class RezervacijaService {
 			int cenaPoNoci = found.getCenaPoNoci();
 			int brojNocenja = newRezervacija.getBrojNocenja();
 			newRezervacija.setUkupnaCena(brojNocenja*cenaPoNoci);
+			newRezervacija.setStatus(0);							//KREIRANA	
 			
 			UUID id = UUID.randomUUID();
 			newRezervacija.setId(id);
 			rezervacije.getRezervacije().put(id, newRezervacija);
 			user.getZakazaneRezervacije().add(newRezervacija);
-			System.out.println(user);
-			System.out.println(rezervacije.getRezervacije().values());
+			
+			if(found.getRezervacije() == null) {
+				found.setRezervacije(new ArrayList<Rezervacija>());
+			}
+			found.getRezervacije().add(newRezervacija);
 			
 			return Response.ok(newRezervacija).build();
 		}
 		
 		return Response.status(400).build();
+		
+	}
+	
+	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getRezervacije(@Context HttpServletRequest request) {
+		ApartmanDAO apartmaniDAO = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
+		User user = (User) request.getSession().getAttribute("user");
+		
+		//Povratni podaci;
+		List<Apartman> apartmani = new ArrayList<Apartman>();
+		
+		for(Rezervacija r : user.getZakazaneRezervacije()) {
+			if(r.getStatus() == 0) {
+				Apartman found = apartmaniDAO.findOneApartman(r.getApartman());
+				Apartman ap = this.findOneApartmanByUUID(apartmani, found);
+				if(ap == null) {
+					Apartman newApartman = new Apartman(found);
+					newApartman.getRezervacije().add(r);
+					apartmani.add(newApartman);
+				}else {
+					ap.getRezervacije().add(r);
+				}
+			}
+		}
+		return Response.ok(apartmani).build();
+	}
+
+	private Apartman findOneApartmanByUUID(List<Apartman> apartmani, Apartman apartman) {
+		for(Apartman a : apartmani) {
+			if(a.getId().equals(apartman.getId()))
+				return a;
+		}
+		return null;
+	}
+	
+	@POST
+	@Path("/odustanak")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response odustaniRezervacija(@Context HttpServletRequest request, Rezervacija rezervacijaOdustanak) {
+		
+		User user = (User) request.getSession().getAttribute("user");
+		ApartmanDAO apartmani = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
+		RezervacijaDAO rezervacije = (RezervacijaDAO) ctx.getAttribute("rezervacijaDAO");
+		
+		for(Rezervacija r : user.getZakazaneRezervacije()) {
+			if(r.getId().equals(rezervacijaOdustanak.getId())) {
+				r.setStatus(2);
+				System.out.println("Novi status je: " + r.getStatus());
+			}
+		}
+		
+//		Rezervacija r = rezervacije.getRezervacije().get(rezervacijaOdustanak.getId());
+//		System.out.println("Rezervacija u bazi je: " + r.getStatus());
+		
+		
+		return Response.status(200).build();
 		
 	}
 }
