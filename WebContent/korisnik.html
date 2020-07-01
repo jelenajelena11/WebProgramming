@@ -9,6 +9,21 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
 <link rel="icon" type="image/x-icon" href="assets/img/apple-icon-57x57.png" />
 <link href="css/domacinPage.css" rel="stylesheet" />
+
+<!-- ************************************************************************************************* -->
+<!-- Dodato za DatePicker -->
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+
+<!-- Latest compiled and minified JavaScript -->
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+ 	   
+<script type="text/javascript" src="js/lib/datepicker/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet"href="js/lib/datepicker/css/bootstrap-datepicker.css" />
+
+<!-- ************************************************************************************************* -->
 <title>Korisnik</title>
 </head>
 
@@ -18,23 +33,22 @@
 
 	
 	<div id="sidebar">
-	<div class="toggle-btn" onclick="toggleSidebar">
-		<span></span>
-		<span></span>
-		<span></span>
+		<div class="toggle-btn" onclick="toggleSidebar">
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+		<ul>
+			<li id="apartmani">Apartmani</li>
+			<li>Moje rezervacije</li>
+			<li id="podaci">Moji podaci</li>
+			<li id="odjava">Logout</li>
+		</ul>
 	</div>
-	<ul>
-		<li>Kreiraj rezervaciju</li>
-		<li>Moje rezervacije</li>
-		<li id="podaci">Moji podaci</li>
-		<li id="odjava">Logout</li>
-	</ul>
-</div>
 
-<div id="podaciDiv" style="width: 400px; height: 800px;margin-left: 450px; margin-right: 220px;">
+	<div id="podaciDiv" style="width: 400px; height: 800px;margin-left: 450px; margin-right: 220px;">
 		
 	</div>
-	
 	
 
 </body>

@@ -127,5 +127,13 @@ public class User implements Serializable{
 	public void setIznajmljeniApartmani(List<Apartman> iznajmljeniApartmani) {
 		this.iznajmljeniApartmani = iznajmljeniApartmani;
 	}
+
+	@Override
+	public String toString() {
+		return "User [userName=" + userName + ", password=" + password + ", firstName=" + firstName + ", lastName="
+				+ lastName + ", email=" + email + ", address=" + address + ", gender=" + gender + ", uloga=" + uloga
+				+ ", apartmaniZaIznajmljivanje=" + apartmaniZaIznajmljivanje + ", zakazaneRezervacije="
+				+ zakazaneRezervacije + ", iznajmljeniApartmani=" + iznajmljeniApartmani + "]";
+	}
 	
 }
