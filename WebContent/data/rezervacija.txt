@@ -1,0 +1,12 @@
+{
+  "52d59d79-e06e-45eb-9c34-78a84510aed9" : {
+    "id" : "52d59d79-e06e-45eb-9c34-78a84510aed9",
+    "apartman" : "25928803-ace8-4d1b-9502-6299dc7eaf28",
+    "pocetakIznajmljivanja" : "2020-07-28",
+    "brojNocenja" : 5,
+    "ukupnaCena" : 250,
+    "poruka" : "poruka5",
+    "gost" : null,
+    "status" : 0
+  }
+}

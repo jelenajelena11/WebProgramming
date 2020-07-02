@@ -32,6 +32,11 @@ function prikaziKorisnike(){
 	return function(event){
 		event.preventDefault();
 		
+//		document.getElementById('domaciniDIV').html('');
+//		document.getElementById('korisniciDIV').html('');
+		$('#domaciniDIV').html('');
+		$('#korisniciDIV').html('');
+		
 		$.ajax({
 			url: 'rest/user/korisnik',
 			type: 'GET',
@@ -63,6 +68,9 @@ function ispisiKorisnike(user){
 function prikaziApartmane(){
 	return function(event){
 		event.preventDefault();
+		
+		$('#domaciniDIV').html('');
+		$('#korisniciDIV').html('');
 		
 		$.ajax({
 			url: 'rest/user/apartman',
@@ -215,6 +223,7 @@ function prikaziPendingRezervacije(){
 		
 		console.log('Usao u prendingRezervacije function domacina.');
 		$('#domaciniDIV').html('');
+		$('#korisniciDIV').html('');
 		
 		$.ajax({
 			url: 'rest/user/apartman/rezervacija/kreiran',

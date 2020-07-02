@@ -103,7 +103,7 @@ public class ApartmanDAO {
 			objectMapper.setVisibilityChecker(
 					VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
 			TypeFactory factory = TypeFactory.defaultInstance();
-			MapType type = factory.constructMapType(HashMap.class, String.class, Apartman.class);
+			MapType type = factory.constructMapType(HashMap.class, UUID.class, Apartman.class);
 			objectMapper.getFactory().configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
 			apartmani = ((HashMap<UUID, Apartman>) objectMapper.readValue(file, type));
 		} catch (FileNotFoundException fnfe) {
@@ -113,8 +113,8 @@ public class ApartmanDAO {
 				ObjectMapper objectMapper = new ObjectMapper();
 				objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
 				objectMapper.getFactory().configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
-				String stringRestaurants = objectMapper.writeValueAsString(apartmani);
-				fileWriter.write(stringRestaurants);
+				String stringApartman = objectMapper.writeValueAsString(apartmani);
+				fileWriter.write(stringApartman);
 			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {

@@ -37,6 +37,9 @@ public class RezervacijaService {
 		if(ctx.getAttribute("apartmanDAO") == null) {
 			ctx.setAttribute("apartmanDAO", new ApartmanDAO());
 		}
+		if(ctx.getAttribute("userDAO") == null) {
+			ctx.setAttribute("userDAO", new UserDAO());
+		}
 	}
 	
 	//Provjeriti da rezervacija ima sacuvan citav Apartman, ne samo UUID apartmana
@@ -46,6 +49,7 @@ public class RezervacijaService {
 	public Response createRezervacija(@Context HttpServletRequest request, Rezervacija newRezervacija) {
 		
 		User user = (User) request.getSession().getAttribute("user");
+		UserDAO users = (UserDAO) ctx.getAttribute("userDAO");
 		ApartmanDAO apartmani = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
 		RezervacijaDAO rezervacije = (RezervacijaDAO) ctx.getAttribute("rezervacijaDAO");
 		
@@ -65,6 +69,10 @@ public class RezervacijaService {
 				found.setRezervacije(new ArrayList<Rezervacija>());
 			}
 			found.getRezervacije().add(newRezervacija);
+			
+			users.saveUsers("");
+			rezervacije.saveRezervacije("");
+			apartmani.saveApartmani("");
 			
 			return Response.ok(newRezervacija).build();
 		}
@@ -114,13 +122,20 @@ public class RezervacijaService {
 	public Response odustaniRezervacija(@Context HttpServletRequest request, Rezervacija rezervacijaOdustanak) {
 		
 		User user = (User) request.getSession().getAttribute("user");
+		RezervacijaDAO rezervacije = (RezervacijaDAO) ctx.getAttribute("rezervacijaDAO");
+		UserDAO users = (UserDAO) ctx.getAttribute("userDAO");
 		
 		for(Rezervacija r : user.getZakazaneRezervacije()) {
 			if(r.getId().equals(rezervacijaOdustanak.getId())) {
 				r.setStatus(2);
 				System.out.println("Novi status je: " + r.getStatus());
+				users.saveUsers("");
 			}
 		}
+		
+		Rezervacija rez = rezervacije.getRezervacije().get(rezervacijaOdustanak.getId());
+		rez.setStatus(2);
+		rezervacije.saveRezervacije("");
 		
 		return Response.status(200).build();
 	}
@@ -132,13 +147,19 @@ public class RezervacijaService {
 	public Response odbijRezervacija(@Context HttpServletRequest request, Rezervacija rezervacijaOdbij) {
 		
 		User user = (User) request.getSession().getAttribute("user");
+		RezervacijaDAO rezervacije = (RezervacijaDAO) ctx.getAttribute("rezervacijaDAO");
+		UserDAO users = (UserDAO) ctx.getAttribute("userDAO");
 		
 		for(Rezervacija r : user.getZakazaneRezervacije()) {
 			if(r.getId().equals(rezervacijaOdbij.getId())) {
 				r.setStatus(1);
 				System.out.println("Novi status je: " + r.getStatus());
+				users.saveUsers("");
 			}
 		}
+		Rezervacija rez = rezervacije.getRezervacije().get(rezervacijaOdbij.getId());
+		rez.setStatus(1);
+		rezervacije.saveRezervacije("");
 		
 		return Response.status(200).build();
 	}
@@ -151,15 +172,19 @@ public class RezervacijaService {
 		
 		User user = (User) request.getSession().getAttribute("user");
 		RezervacijaDAO rezervacije = (RezervacijaDAO) ctx.getAttribute("rezervacijaDAO");
+		UserDAO users = (UserDAO) ctx.getAttribute("userDAO");
 		
 		for(Rezervacija r : user.getZakazaneRezervacije()) {
 			if(r.getId().equals(rezervacijaPrihvati.getId())) {
 				r.setStatus(3);
 				System.out.println("Novi status je: " + r.getStatus());
+				users.saveUsers("");
 			}
 		}
 		
 		Rezervacija rez = rezervacije.getRezervacije().get(rezervacijaPrihvati.getId());
+		rez.setStatus(3);
+		rezervacije.saveRezervacije("");
 		System.out.println("Id prihvacene rez je: " + rez.getStatus());
 		
 		return Response.status(200).build();

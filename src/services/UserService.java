@@ -98,7 +98,10 @@ public class UserService {
 		List<Apartman> aktivniPending = new ArrayList<Apartman>();
 		
 		for(Apartman a : apartmani.getApartmani().values()) {
-			if(a.getDomacin().equals(loggedIn.getId())) {
+			System.out.println("Domacin je: " + a.getDomacin());
+			System.out.println("Ulogovan je: " + loggedIn);
+			if(a.getDomacin().getId().equals(loggedIn.getId())) {
+				System.out.println("Nasao apartman kome je vlasnik loggedIn");
 				if(a.getStatus() == 0) {									//DOBAVLJA SAMO AKTIVNE APARTMANE
 					Apartman newApartman = new Apartman(a);
 					System.out.println("Apartman je: ");
