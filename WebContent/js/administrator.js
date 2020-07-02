@@ -1,13 +1,8 @@
 $(document).ready(function(){
-	
-	document.getElementById('korisniciTabelaForma').style.visibility = "hidden"
-	document.getElementById('domaciniTabelaForma').style.visibility = "hidden"
-	
+
 	$('#odjava').click(logout());
-	
-	$('#domaciniTableBTN').click(onDomaciniTableBTN());
-	
-	$('#korisniciTableBTN').click(onKorisniciTableBTN());
+	$('#pregledKorisnika').click(prikaziKorisnike());
+	$('#pregledDomacina').click(prikaziDomacine());
 })
 
 function logout(){
@@ -25,73 +20,72 @@ function logout(){
 	}
 }
 
-function onDomaciniTableBTN(){
+function prikaziKorisnike(){
+	
 	return function(event){
 		event.preventDefault();
+
+		$('#domaciniDIV').html('');
+		$('#korisniciDIV').html('');
 		
-		if(!(document.getElementById('korisniciTabelaForma').style.visibility = "hidden")){
-			document.getElementById('korisniciTabelaForma').style.visibility = "hidden"
-		}
-		document.getElementById('domaciniTabelaForma').style.visibility = "visible"
-		getDomacini();
+		$.ajax({
+			url: 'rest/user/korisnik',
+			type: 'GET',
+			contentType : 'application/json',
+			success : function(users){
+				for(let user of users){
+					console.log(user);
+					ispisiKorisnike(user);
+				}
+			}
+		});
 	}
 }
 
-function onKorisniciTableBTN(){
+function prikaziDomacine(){
+	
 	return function(event){
 		event.preventDefault();
+
+		$('#domaciniDIV').html('');
+		$('#korisniciDIV').html('');
 		
-		if(!(document.getElementById('domaciniTabelaForma').style.visibility = "hidden")){
-			document.getElementById('domaciniTabelaForma').style.visibility = "hidden"
-		}
-		document.getElementById('korisniciTabelaForma').style.visibility = "visible"
-		getKorisnike();
+		$.ajax({
+			url: 'rest/user/domacin',
+			type: 'GET',
+			contentType : 'application/json',
+			success : function(users){
+				for(let user of users){
+					console.log(user);
+					ispisiDomacine(user);
+				}
+			}
+		});
 	}
 }
 
-function getDomacini(){
+function ispisiKorisnike(user){
 	
-	$.ajax({
-		url : '../PocetniREST/rest/user/domacin',
-		type : 'GET',
-		contentType: 'application/json',
-		success : function(users){
-			$('#domaciniTabelaForma tbody').html('');
-			for(let user of users){
-				ispisiUser(user, 'domacini');
-			}
-		},
-		error : function(){
-			alert('Ups, nesto ne valja u dobavljanju!');
-		}
-	});
+	let div = $('#korisniciDIV');
+	let div2 = $('<div height:2000px; margin-top: 300px;"></div>');
+	//let userName = $('<h4>Username: </h4'+user.getUserName);
+	//let ime = $('<h4>Ime: </h4>'+user.getFirstName);
+	let naziv = $('<h3>Pregled svih korisnika:</h3>')
+	let tabela = $('<table><tr><th> Username: </th> <th>'+user.userName+' </th></tr><tr><th>Ime:</th><th>'+user.firstName+'</th></tr><tr><th> Prezime:</th><th>'+user.lastName+'</th></tr><tr><th>Pol: </th><th>'+user.gender+' </th></tr><tr><th> Lozinka: </th><th>'+user.password+'</th></tr></table>');
+	
+	div2.append(naziv).append(tabela);
+	div.append(div2);
 }
 
-function getKorisnike(){
+function ispisiDomacine(user){
 	
-	$.ajax({
-		url : '../PocetniREST/rest/user/korisnik',
-		type : 'GET',
-		contentType: 'application/json',
-		success : function(users){
-			$('#korisniciTabelaForma tbody').html('');
-			for(let user of users){
-				ispisiUser(user, 'korisnici');
-			}
-		},
-		error : function(){
-			alert('Ups, nesto ne valja u dobavljanju!');
-		}
-	});
-}
-function ispisiUser(user, tabela){
-	let tr = $('<tr></tr>');
-	let username = $('<td>' + user.userName + '</td>');
-	let firstname = $('<td>' + user.firstName + '</td>');
-	let lastname = $('<td>' + user.lastName + '</td>');
-	let email = $('<td>' + user.email + '</td>');
-	let address = $('<td>' + user.address + '</td>');
+	let div = $('#domaciniDIV');
+	let div2 = $('<div height:2000px; margin-top: 300px;"></div>');
+	//let userName = $('<h4>Username: </h4'+user.getUserName);
+	//let ime = $('<h4>Ime: </h4>'+user.getFirstName);
+	let naziv = $('<h3>Pregled svih domacina:</h3>')
+	let tabela = $('<table><tr><th> Username: </th> <th>'+user.userName+' </th></tr><tr><th>Ime:</th><th>'+user.firstName+'</th></tr><tr><th> Prezime:</th><th>'+user.lastName+'</th></tr><tr><th>Pol: </th><th>'+user.gender+' </th></tr><tr><th> Lozinka: </th><th>'+user.password+'</th></tr></table>');
 	
-	tr.append(username).append(firstname).append(lastname).append(email).append(address);
-	$('#' + tabela + 'TabelaForma tbody').append(tr);
+	div2.append(naziv).append(tabela);
+	div.append(div2);
 }
