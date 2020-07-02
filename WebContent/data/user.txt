@@ -1,0 +1,44 @@
+{
+  "Goku" : {
+    "id" : "c38bd929-747e-487c-bce4-5e7ef3f90084",
+    "userName" : "Goku",
+    "password" : "goran",
+    "firstName" : "Goran",
+    "lastName" : "Kuljanin",
+    "email" : "goku@gmail.com",
+    "address" : "Ugljevik",
+    "gender" : "M",
+    "uloga" : 1,
+    "apartmaniZaIznajmljivanje" : [ ],
+    "zakazaneRezervacije" : [ ],
+    "iznajmljeniApartmani" : [ ]
+  },
+  "Jela" : {
+    "id" : "61e5fb32-81b6-4a86-85ad-6d7c4184f46b",
+    "userName" : "Jela",
+    "password" : "goran",
+    "firstName" : "Jelena",
+    "lastName" : "Stojanovic",
+    "email" : "jela@gmail.com",
+    "address" : "Novi Sad",
+    "gender" : "F",
+    "uloga" : 2,
+    "apartmaniZaIznajmljivanje" : [ "36d59ee6-ad41-4a93-ab02-a84d73e22f5a", "35a44995-7ee3-416e-a3b5-860e2c199755", "25928803-ace8-4d1b-9502-6299dc7eaf28" ],
+    "zakazaneRezervacije" : [ ],
+    "iznajmljeniApartmani" : [ ]
+  },
+  "Korisnik" : {
+    "id" : "4cfb7410-1cfa-4d7d-9f36-cd11e6d24108",
+    "userName" : "Korisnik",
+    "password" : "goran",
+    "firstName" : "Korisnik",
+    "lastName" : "Korisnik",
+    "email" : "korisnik@gmail.com",
+    "address" : "Bijeljina",
+    "gender" : "F",
+    "uloga" : 0,
+    "apartmaniZaIznajmljivanje" : [ ],
+    "zakazaneRezervacije" : [ ],
+    "iznajmljeniApartmani" : [ ]
+  }
+}

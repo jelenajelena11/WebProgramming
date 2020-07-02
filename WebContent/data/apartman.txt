@@ -1,0 +1,125 @@
+{
+  "36d59ee6-ad41-4a93-ab02-a84d73e22f5a" : {
+    "id" : "36d59ee6-ad41-4a93-ab02-a84d73e22f5a",
+    "tipSobe" : 0,
+    "brojSoba" : 2,
+    "brojGostiju" : 2,
+    "lokacija" : {
+      "width" : 14,
+      "length" : 12,
+      "adresa" : {
+        "id" : "7ee7d0c0-e7c8-40d6-b176-325b53cb7b97",
+        "ulica" : "Djordja Jovanovica",
+        "broj" : 14,
+        "mesto" : "Novi Sad",
+        "postanskiBroj" : 21000
+      }
+    },
+    "datePocetakVazenja" : "2020-06-28",
+    "krajPocetakVazenja" : "2020-07-22",
+    "domacin" : {
+      "id" : "61e5fb32-81b6-4a86-85ad-6d7c4184f46b",
+      "userName" : "Jela",
+      "password" : "goran",
+      "firstName" : "Jelena",
+      "lastName" : "Stojanovic",
+      "email" : "jela@gmail.com",
+      "address" : "Novi Sad",
+      "gender" : "F",
+      "uloga" : 2,
+      "apartmaniZaIznajmljivanje" : [ ],
+      "zakazaneRezervacije" : [ ],
+      "iznajmljeniApartmani" : [ ]
+    },
+    "komentari" : null,
+    "slika" : "./assets/img/rent.jpg",
+    "cenaPoNoci" : 50,
+    "vremeZaPrijavu" : "14:00",
+    "vremeZaOdjavu" : "10:00",
+    "status" : 0,
+    "sadrzajApartmana" : null,
+    "rezervacije" : null
+  },
+  "35a44995-7ee3-416e-a3b5-860e2c199755" : {
+    "id" : "35a44995-7ee3-416e-a3b5-860e2c199755",
+    "tipSobe" : 0,
+    "brojSoba" : 2,
+    "brojGostiju" : 2,
+    "lokacija" : {
+      "width" : 15,
+      "length" : 12,
+      "adresa" : {
+        "id" : "42aeabf8-2450-4bae-87cf-ad81463fc03f",
+        "ulica" : "Bulevar Oslobodjenja",
+        "broj" : 14,
+        "mesto" : "Novi Sad",
+        "postanskiBroj" : 21000
+      }
+    },
+    "datePocetakVazenja" : "2020-06-11",
+    "krajPocetakVazenja" : "2020-08-07",
+    "domacin" : {
+      "id" : "61e5fb32-81b6-4a86-85ad-6d7c4184f46b",
+      "userName" : "Jela",
+      "password" : "goran",
+      "firstName" : "Jelena",
+      "lastName" : "Stojanovic",
+      "email" : "jela@gmail.com",
+      "address" : "Novi Sad",
+      "gender" : "F",
+      "uloga" : 2,
+      "apartmaniZaIznajmljivanje" : [ ],
+      "zakazaneRezervacije" : [ ],
+      "iznajmljeniApartmani" : [ ]
+    },
+    "komentari" : null,
+    "slika" : "./assets/img/rent.jpg",
+    "cenaPoNoci" : 50,
+    "vremeZaPrijavu" : "15:00",
+    "vremeZaOdjavu" : "9:00",
+    "status" : 0,
+    "sadrzajApartmana" : null,
+    "rezervacije" : null
+  },
+  "25928803-ace8-4d1b-9502-6299dc7eaf28" : {
+    "id" : "25928803-ace8-4d1b-9502-6299dc7eaf28",
+    "tipSobe" : 0,
+    "brojSoba" : 2,
+    "brojGostiju" : 2,
+    "lokacija" : {
+      "width" : 15,
+      "length" : 12,
+      "adresa" : {
+        "id" : "a1c9456d-bab1-4cda-8d0e-1a5afc0aec88",
+        "ulica" : "Vuka Karadzica",
+        "broj" : 14,
+        "mesto" : "Bijeljina",
+        "postanskiBroj" : 21000
+      }
+    },
+    "datePocetakVazenja" : "2020-06-21",
+    "krajPocetakVazenja" : "2020-08-17",
+    "domacin" : {
+      "id" : "61e5fb32-81b6-4a86-85ad-6d7c4184f46b",
+      "userName" : "Jela",
+      "password" : "goran",
+      "firstName" : "Jelena",
+      "lastName" : "Stojanovic",
+      "email" : "jela@gmail.com",
+      "address" : "Novi Sad",
+      "gender" : "F",
+      "uloga" : 2,
+      "apartmaniZaIznajmljivanje" : [ ],
+      "zakazaneRezervacije" : [ ],
+      "iznajmljeniApartmani" : [ ]
+    },
+    "komentari" : null,
+    "slika" : "./assets/img/rent.jpg",
+    "cenaPoNoci" : 50,
+    "vremeZaPrijavu" : "12:00",
+    "vremeZaOdjavu" : "10:00",
+    "status" : 0,
+    "sadrzajApartmana" : null,
+    "rezervacije" : null
+  }
+}

@@ -1,13 +1,10 @@
 package model;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Apartman implements Serializable{
+public class Apartman{
 
 	private UUID id;
 	private int tipSobe; //0 - Ceo apartman; 1 - Soba

@@ -1,10 +1,12 @@
 package model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-public class User implements Serializable{
+public class User{
+	
+	private UUID id;
 	
 	private String userName;
 	private String password;
@@ -16,18 +18,19 @@ public class User implements Serializable{
 	
 	private int uloga = 0; // 0 - Korisnik; 1 - Admin; 2 - Domacin
 	
-	private List<Apartman> apartmaniZaIznajmljivanje = new ArrayList<Apartman>();	//Domacin
+	private List<UUID> apartmaniZaIznajmljivanje = new ArrayList<UUID>();	//Domacin
 	private List<Rezervacija> zakazaneRezervacije = new ArrayList<Rezervacija>();	//Gost
 	
 	private List<Apartman> iznajmljeniApartmani = new ArrayList<Apartman>();	//Gost
 	
 	public User(){
-		
+		this.id = UUID.randomUUID();
 	}
 	
 	public User(String userName, String password, String firstName, String lastName, String email, String address, String gender) {
 		
 		super();
+		this.id = UUID.randomUUID();
 		this.userName = userName;
 		this.password = password;
 		this.firstName = firstName;
@@ -41,6 +44,7 @@ public class User implements Serializable{
 	public User(String userName, String password, String firstName, String lastName, String email, String address, String gender, int uloga) {
 		
 		super();
+		this.id = UUID.randomUUID();
 		this.userName = userName;
 		this.password = password;
 		this.firstName = firstName;
@@ -104,11 +108,11 @@ public class User implements Serializable{
 		this.uloga = uloga;
 	}
 
-	public List<Apartman> getApartmaniZaIznajmljivanje() {
+	public List<UUID> getApartmaniZaIznajmljivanje() {
 		return apartmaniZaIznajmljivanje;
 	}
 
-	public void setApartmaniZaIznajmljivanje(List<Apartman> apartmaniZaIznajmljivanje) {
+	public void setApartmaniZaIznajmljivanje(List<UUID> apartmaniZaIznajmljivanje) {
 		this.apartmaniZaIznajmljivanje = apartmaniZaIznajmljivanje;
 	}
 
@@ -127,13 +131,26 @@ public class User implements Serializable{
 	public void setIznajmljeniApartmani(List<Apartman> iznajmljeniApartmani) {
 		this.iznajmljeniApartmani = iznajmljeniApartmani;
 	}
+	
+	
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
+	}
 
 	@Override
 	public String toString() {
-		return "User [userName=" + userName + ", password=" + password + ", firstName=" + firstName + ", lastName="
-				+ lastName + ", email=" + email + ", address=" + address + ", gender=" + gender + ", uloga=" + uloga
-				+ ", apartmaniZaIznajmljivanje=" + apartmaniZaIznajmljivanje + ", zakazaneRezervacije="
-				+ zakazaneRezervacije + ", iznajmljeniApartmani=" + iznajmljeniApartmani + "]";
+		return "User [id=" + id + ", userName=" + userName + ", password=" + password + ", firstName=" + firstName
+				+ ", lastName=" + lastName + ", email=" + email + ", address=" + address + ", gender=" + gender
+				+ ", uloga=" + uloga + ", apartmaniZaIznajmljivanje=" + apartmaniZaIznajmljivanje
+				+ ", zakazaneRezervacije=" + zakazaneRezervacije + ", iznajmljeniApartmani=" + iznajmljeniApartmani
+				+ "]";
 	}
+
+	
 	
 }

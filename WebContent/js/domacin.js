@@ -117,10 +117,10 @@ function ispisiTerminDatuma(apartman){
 	let termini = $('<div style="float: left"></div>');
 	
 	let vaziOd = $('<h3><i> Vazi od: </i></h3>');
-	let datePocetakVazenja = $('<h3>' + apartman.datePocetakVazenja.dayOfMonth + '-' + apartman.datePocetakVazenja.monthValue + '-' + apartman.datePocetakVazenja.year + '</h3>');
+	let datePocetakVazenja = $('<h3>' + apartman.datePocetakVazenja + '</h3>');
 	
 	let vaziDo = $('<h3><i> Vazi do: </i></h3>');
-	let krajPocetakVazenja = $('<h3>' + apartman.krajPocetakVazenja.dayOfMonth + '-' + apartman.krajPocetakVazenja.monthValue + '-' + apartman.krajPocetakVazenja.year + '</h3>');
+	let krajPocetakVazenja = $('<h3>' + apartman.krajPocetakVazenja + '</h3>');
 	
 	let vreme = ispisiTerminPrijave(apartman);
 	
@@ -135,10 +135,10 @@ function ispisiTerminPrijave(apartman){
 	let termini = $('<div></div>');
 	
 	let prijava = $('<h3><i> Prijava: </i></h3>');
-	let vremePrijave = $('<h3>' + apartman.vremeZaPrijavu.hour + ':' + apartman.vremeZaPrijavu.minute + '</h3>');
+	let vremePrijave = $('<h3>' + apartman.vremeZaPrijavu + '</h3>');
 	
 	let odjava = $('<h3><i> Odjava: </i></h3>');
-	let vremeOdjave = $('<h3>' + apartman.vremeZaOdjavu.hour + ':' + apartman.vremeZaOdjavu.minute + '</h3>');
+	let vremeOdjave = $('<h3>' + apartman.vremeZaOdjavu + '</h3>');
 	
 	termini.append(prijava).append(vremePrijave).append(odjava).append(vremeOdjave);
 	vreme.append(termini);

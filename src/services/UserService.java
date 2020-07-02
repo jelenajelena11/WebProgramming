@@ -75,10 +75,11 @@ public class UserService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getDomacinApartman(@Context HttpServletRequest request) {
 		User loggedIn = (User) request.getSession().getAttribute("user");
+		ApartmanDAO apartmani = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
 		List<Apartman> aktivni = new ArrayList<Apartman>();
 		
-		for(Apartman a : loggedIn.getApartmaniZaIznajmljivanje()) {
-			if(a.getStatus() == 0) {									//DOBAVLJA SAMO AKTIVNE APARTMANE
+		for(Apartman a : apartmani.getApartmani().values()) {
+			if( (a.getStatus() == 0) && (a.getDomacin().getId().equals(loggedIn.getId())) ) { //DOBAVLJA SAMO AKTIVNE APARTMANE
 				aktivni.add(a);		
 			}
 		}
@@ -97,7 +98,7 @@ public class UserService {
 		List<Apartman> aktivniPending = new ArrayList<Apartman>();
 		
 		for(Apartman a : apartmani.getApartmani().values()) {
-			if(a.getDomacin().getUserName().equals(loggedIn.getUserName())) {
+			if(a.getDomacin().equals(loggedIn.getId())) {
 				if(a.getStatus() == 0) {									//DOBAVLJA SAMO AKTIVNE APARTMANE
 					Apartman newApartman = new Apartman(a);
 					System.out.println("Apartman je: ");
