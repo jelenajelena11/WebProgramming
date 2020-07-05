@@ -21,6 +21,7 @@ import javax.ws.rs.core.Response;
 import dao.ApartmanDAO;
 import model.Adresa;
 import model.Apartman;
+import model.Komentar;
 import model.User;
 
 @Path("/apartman")
@@ -115,6 +116,48 @@ public class ApartmanService {
 		
 		System.out.println("Pronadjeni apartmani: " + aktivni);
 		return Response.ok(aktivni).build();
+	}
+	
+	@POST
+	@Path("/komentar")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createKomentar(@Context HttpServletRequest request, Komentar komentar) {
+		
+		ApartmanDAO apartmani = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
+		Apartman a = apartmani.findOneApartman(komentar.getApartman());
+		if(a.getKomentari() != null) {
+			a.getKomentari().add(komentar);
+		}else {
+			List<Komentar> komentari = new ArrayList<Komentar>();
+			komentari.add(komentar);
+			a.setKomentari(komentari);
+		}
+		
+		System.out.println("Uneseni komentar je: " + komentar);
+		System.out.println("Apartman sa komentarom je: " + a);
+		
+		return Response.ok().build();
+	}
+	@POST
+	@Path("/komentar/odobri")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response odobriKomentar(@Context HttpServletRequest request, Komentar komentar) {
+		
+		ApartmanDAO apartmani = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
+		Apartman a = apartmani.findOneApartman(komentar.getApartman());
+		
+		for(Komentar k : a.getKomentari()) {
+			if(k.getId().equals(komentar.getId())) {
+				k.setOdobren(true);
+			}
+		}
+		
+		System.out.println("Uneseni komentar odobri je: " + komentar);
+		System.out.println("Apartman sa komentarom odobri je: " + a);
+		
+		return Response.ok().build();
 	}
 	
 	private boolean isMestoValid(String mesto, String toSearch) {

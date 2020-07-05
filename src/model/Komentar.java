@@ -1,21 +1,36 @@
 package model;
 
+import java.util.UUID;
+
 public class Komentar {
 
+	private UUID id = UUID.randomUUID();
 	private User gost;
-	private Apartman apartman;
+	private UUID apartman;
 	private String text;
 	private int ocena;
+	private boolean odobren;
 	
 	public Komentar() {
 	}
 	
-	public Komentar(User gost, Apartman apartman, String text, int ocena) {
+	public Komentar(User gost, UUID apartman, String text, int ocena, boolean odobren) {
 		super();
+		this.id = UUID.randomUUID();
 		this.gost = gost;
 		this.apartman = apartman;
 		this.text = text;
 		this.ocena = ocena;
+		this.odobren = odobren;
+	}
+	
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
 	}
 
 	public User getGost() {
@@ -26,11 +41,11 @@ public class Komentar {
 		this.gost = gost;
 	}
 
-	public Apartman getApartman() {
+	public UUID getApartman() {
 		return apartman;
 	}
 
-	public void setApartman(Apartman apartman) {
+	public void setApartman(UUID apartman) {
 		this.apartman = apartman;
 	}
 
@@ -50,10 +65,21 @@ public class Komentar {
 		this.ocena = ocena;
 	}
 
+	
+	public boolean isOdobren() {
+		return odobren;
+	}
+
+	public void setOdobren(boolean odobren) {
+		this.odobren = odobren;
+	}
+
 	@Override
 	public String toString() {
-		return "Komentar [gost=" + gost + ", apartman=" + apartman + ", text=" + text + ", ocena=" + ocena + "]";
+		return "Komentar [id=" + id + ", gost=" + gost + ", apartman=" + apartman + ", text=" + text + ", ocena="
+				+ ocena + ", odobren=" + odobren + "]";
 	}
+
 	
 	
 }

@@ -112,8 +112,10 @@ function ispisiApartmane(apartman){
 	let datumVazenja = ispisiTerminDatuma(apartman);
 	let lokacija = ispisiLokaciju(apartman);
 	let button = ispisiButton(apartman);
+	let komentari = ispisiButtonKomentariApartman(apartman);
+	let sviKomentari = prikazKomentara(apartman);
 	
-	div.append(podaci).append(datumVazenja).append(slika).append(lokacija).append(button);
+	div.append(podaci).append(datumVazenja).append(slika).append(lokacija).append(button).append(sviKomentari).append(komentari);
 	divOrigin.append(div);
 }
 
@@ -209,6 +211,65 @@ function ispisiButton(apartman){
 	});
 	
 	return button;
+}
+
+function ispisiButtonKomentariApartman(apartman){
+	let button = $('<input type="button" id="komentariDivButton' + apartman.id + '" style="margin-left: 20px; width: 90%;" value="Pogledaj Komentare" />');
+	
+	button.on('click', function(event){
+		console.log('Kliknut apartman: ' + apartman.id);
+		
+		var xKom = document.getElementById('komentariDiv' + apartman.id);
+		
+		if(xKom.style.display === "none"){
+			xKom.style.display = "block";
+			document.getElementById('komentariDivButton' + apartman.id).value = "Zatvori";
+		}else{
+			xKom.style.display = "none";
+			document.getElementById('komentariDivButton' + apartman.id).value = "Pogledaj Komentare";
+		}
+	});
+	
+	return button;
+}
+function prikazKomentara(apartman){
+	let div = $('<div id="komentariDiv' + apartman.id + '" style="margin-left: 20px; margin-right: 20px; border-style: solid;background-color: aqua; padding-left: 20px"></div>');
+
+	
+	if(apartman.komentari != null){
+		for(let koment of apartman.komentari){
+			let a = $('<div style="border-style: solid;"><p>Komentar: ' + koment.text + '</p><p>Ocena: ' + koment.ocena + '</p></div>');
+			div.append(a);
+			if(!(koment.odobren)){
+				let odobri = $('<button>Odobri Komentar</button>');
+				a.append(odobri);
+	
+				odobri.on('click', function(event){
+					odobriKomentar(koment);
+				});
+			}
+		}
+	}
+	
+	//div.append(komentarDiv);
+	div.hide();
+	return div;
+}
+function odobriKomentar(koment){
+	var obj = {"id": koment.id, "apartman": koment.apartman};
+	
+	$.ajax({
+		url: 'rest/apartman/komentar/odobri',
+		type: 'POST',
+		contentType : 'application/json',
+		data: JSON.stringify(obj),
+		success : function(response){
+			console.log('Odgovor servisa je:' + response);
+		},
+		error : function(response){
+			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+		}
+	});
 }
 //**************************************************************************************
 function logout(){

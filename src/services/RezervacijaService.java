@@ -95,7 +95,7 @@ public class RezervacijaService {
 		List<Apartman> apartmani = new ArrayList<Apartman>();
 		
 		for(Rezervacija r : user.getZakazaneRezervacije()) {
-			if(r.getStatus() == 0) {
+			//if(r.getStatus() == 0) {
 				Apartman found = apartmaniDAO.findOneApartman(r.getApartman());
 				Apartman ap = this.findOneApartmanByUUID(apartmani, found);
 				if(ap == null) {
@@ -105,7 +105,7 @@ public class RezervacijaService {
 				}else {
 					ap.getRezervacije().add(r);
 				}
-			}
+			//}
 		}
 		return Response.ok(apartmani).build();
 	}

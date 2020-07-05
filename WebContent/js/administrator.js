@@ -115,6 +115,7 @@ function prikaziApartmane(){
 		
 		$('#domaciniDIV').html('');
 		$('#korisniciDIV').html('');
+		$('#podaciDiv').html('');
 		document.getElementById('searchDiv').style.visibility = "visible";
 		document.getElementById('sortirajRezervacije').style.visibility = "hidden";
 		document.getElementById('statusRezervacije').style.visibility = "hidden";
@@ -145,10 +146,12 @@ function ispisiApartmane(apartman){
 	let slika = ispisiSlikuDIV(apartman);
 	let datumVazenja = ispisiTerminDatuma(apartman);
 	let lokacija = ispisiLokaciju(apartman);
+	let komentari = ispisiButtonKomentariApartman(apartman);
+	let sviKomentari = prikazKomentara(apartman);
 	//let button = ispisiButton(apartman);
 	//let rezervacija = ispisiRezervacijaZakazivanje(apartman);
 	
-	div.append(podaci).append(datumVazenja).append(slika).append(lokacija);//.append(rezervacija).append(button);
+	div.append(podaci).append(datumVazenja).append(slika).append(lokacija).append(sviKomentari).append(komentari);//.append(rezervacija).append(button);
 	divOrigin.append(div);
 }
 
@@ -231,7 +234,44 @@ function ispisiLokaciju(apartman){
 	lokacija.append(adresa).append(mesto).append(lokac);
 	
 	return lokacija;
-}//**********************************************************************************************
+}
+
+function ispisiButtonKomentariApartman(apartman){
+	let button = $('<input type="button" id="komentariDivButton' + apartman.id + '" style="margin-left: 20px; width: 90%;" value="Pogledaj Komentare" />');
+	
+	button.on('click', function(event){
+		console.log('Kliknut apartman: ' + apartman.id);
+		
+		var xKom = document.getElementById('komentariDiv' + apartman.id);
+		
+		if(xKom.style.display === "none"){
+			xKom.style.display = "block";
+			document.getElementById('komentariDivButton' + apartman.id).value = "Zatvori";
+		}else{
+			xKom.style.display = "none";
+			document.getElementById('komentariDivButton' + apartman.id).value = "Pogledaj Komentare";
+		}
+	});
+	
+	return button;
+}
+function prikazKomentara(apartman){
+	let div = $('<div id="komentariDiv' + apartman.id + '" style="margin-left: 20px; margin-right: 20px; border-style: solid;background-color: aqua; padding-left: 20px"></div>');
+
+	
+	if(apartman.komentari != null){
+		for(let koment of apartman.komentari){
+			let a = $('<div style="border-style: solid;"><p>Komentar: ' + koment.text + '</p><p>Ocena: ' + koment.ocena + '</p></div>');
+			div.append(a);
+		}
+	}
+	
+	//div.append(komentarDiv);
+	div.hide();
+	return div;
+}
+
+//**********************************************************************************************
 //*******************************************************************************
 //Prikaz rezervacija
 
