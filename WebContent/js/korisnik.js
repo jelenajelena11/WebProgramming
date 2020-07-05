@@ -257,7 +257,8 @@ function prikazKomentara(apartman){
 	if(apartman.komentari != null){
 		for(let koment of apartman.komentari){
 			if(koment.odobren){
-				let a = $('<div style="border-style: solid;"><p>Komentar: ' + koment.text + '</p><p>Ocena: ' + koment.ocena + '</p></div>');
+				let gostKomentar = dobaviGostaKomentara(koment.gost);
+				let a = $('<div style="border-style: solid;"><p>Gost: ' + gostKomentar.userName + '</p><p>Komentar: ' + koment.text + '</p><p>Ocena: ' + koment.ocena + '</p></div>');
 				div.append(a);
 			}
 		}
@@ -267,7 +268,24 @@ function prikazKomentara(apartman){
 	div.hide();
 	return div;
 }
-
+function dobaviGostaKomentara(gost){
+	var obj = {"gost": gost};
+	var gost
+	
+	$.ajax({
+		url: 'rest/apartman/komentar/gost',
+		type: 'POST',
+		contentType : 'application/json',
+		data: JSON.stringify(obj),
+		success : function(response){
+			gost = response;
+		},
+		error : function(response){
+			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+		}
+	});
+	return gost;
+}
 
 function ispisiRezervacijaZakazivanje(apartman){
 	let div = $('<div id="rezervacijaDiv' + apartman.id + '" style="margin-left: 20px; margin-right: 20px; border-style: solid;background-color: aqua; padding-left: 20px"></div>');

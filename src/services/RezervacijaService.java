@@ -65,6 +65,7 @@ public class RezervacijaService {
 			
 			UUID id = UUID.randomUUID();
 			newRezervacija.setId(id);
+			newRezervacija.setGost(user.getId());
 			rezervacije.getRezervacije().put(id, newRezervacija);
 			user.getZakazaneRezervacije().add(newRezervacija);
 			

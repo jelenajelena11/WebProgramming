@@ -77,6 +77,15 @@ public class UserDAO {
 		return null;
 	}
 	
+	public User findUser(UUID id) {
+		for(User u : this.users.values()) {
+			if(u.getId().equals(id)) {
+				return u;
+			}
+		}
+		return null;
+	}
+	
 	public boolean find(String username) {
 		if (users.containsKey(username)) {
 			return true;

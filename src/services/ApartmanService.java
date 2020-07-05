@@ -19,6 +19,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import dao.ApartmanDAO;
+import dao.UserDAO;
 import model.Adresa;
 import model.Apartman;
 import model.Komentar;
@@ -34,6 +35,9 @@ public class ApartmanService {
 	public void init() {
 		if(ctx.getAttribute("apartmanDAO") == null) {
 			ctx.setAttribute("apartmanDAO", new ApartmanDAO());
+		}
+		if(ctx.getAttribute("userDAO") == null) {
+			ctx.setAttribute("userDAO", new UserDAO());
 		}
 	}
 	
@@ -124,12 +128,16 @@ public class ApartmanService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createKomentar(@Context HttpServletRequest request, Komentar komentar) {
 		
+		User loggedIn = (User) request.getSession().getAttribute("user");
 		ApartmanDAO apartmani = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
 		Apartman a = apartmani.findOneApartman(komentar.getApartman());
+		
 		if(a.getKomentari() != null) {
+			komentar.setGost(loggedIn);
 			a.getKomentari().add(komentar);
 		}else {
 			List<Komentar> komentari = new ArrayList<Komentar>();
+			komentar.setGost(loggedIn);
 			komentari.add(komentar);
 			a.setKomentari(komentari);
 		}
@@ -156,6 +164,21 @@ public class ApartmanService {
 		
 		System.out.println("Uneseni komentar odobri je: " + komentar);
 		System.out.println("Apartman sa komentarom odobri je: " + a);
+		
+		return Response.ok().build();
+	}
+	
+	@POST
+	@Path("/komentar/gost")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response gostKomentar(@Context HttpServletRequest request, Komentar komentar) {
+		
+		UserDAO users = (UserDAO) ctx.getAttribute("userDAO");
+		User u = users.findUser(komentar.getGost());
+		if(u == null) {
+			return Response.status(400).build();
+		}
 		
 		return Response.ok().build();
 	}

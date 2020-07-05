@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -72,6 +73,123 @@ public class UserService {
 		}
 		
 		return usersArray;
+	}
+	
+	@GET
+	@Path("/domacin/gost")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<User> getUsersDomacina(@Context HttpServletRequest request) {
+		UserDAO users = (UserDAO) ctx.getAttribute("userDAO");
+		User loggedIn = (User) request.getSession().getAttribute("user");
+		ApartmanDAO apartmani = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
+
+		
+		List<User> unique = this.getGostiDomacina(users, loggedIn, apartmani);
+		
+		return unique;
+	}
+	
+	@POST
+	@Path("/domacin/gost/search")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<User> getUsersDomacinaSearch(@Context HttpServletRequest request, String search) {
+		UserDAO users = (UserDAO) ctx.getAttribute("userDAO");
+		User loggedIn = (User) request.getSession().getAttribute("user");
+		ApartmanDAO apartmani = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
+		
+		System.out.println("Search je: " + search);
+		String[] searchArray = search.split(",");
+		String username = ((searchArray[0]).split(":"))[1];
+		String ime = ((searchArray[1]).split(":"))[1];
+		String prezime = ((searchArray[2]).split(":"))[1];
+		String pol = ((searchArray[3]).split(":"))[1];
+
+		
+		List<User> unique = this.getGostiDomacina(users, loggedIn, apartmani);
+		List<User> ok = new ArrayList<User>();
+		for(User u : unique) {
+			if(this.isUsernameValid(u.getUserName(), username)
+					&& this.isImeValid(u.getFirstName(), ime)
+					&& this.isPrezimeValid(u.getLastName(), prezime)
+					&& this.isPolValid(u.getGender(), pol)) {
+				ok.add(u);
+			}
+		}
+		
+		return ok;
+	}
+	private boolean isUsernameValid(String username, String toSearch) {
+		if(!toSearch.equals("")) {
+			toSearch = toSearch.replace("\"", "");
+			if(username.contains(toSearch)) {
+				return true;
+			}
+			return false;
+		}
+		return true;
+	}
+	private boolean isImeValid(String ime, String toSearch) {
+		if(!toSearch.equals("")) {
+			toSearch = toSearch.replace("\"", "");
+			if(ime.contains(toSearch)) {
+				return true;
+			}
+			return false;
+		}
+		return true;
+	}
+	private boolean isPrezimeValid(String prezime, String toSearch) {
+		if(!toSearch.equals("")) {
+			toSearch = toSearch.replace("\"", "");
+			if(prezime.contains(toSearch)) {
+				return true;
+			}
+			return false;
+		}
+		return true;
+	}
+	private boolean isPolValid(String pol, String toSearch) {
+		if(!toSearch.equals("")) {
+			toSearch = toSearch.replace("\"", "");
+			toSearch = toSearch.replace("}", "");
+			if(pol.contains(toSearch)) {
+				return true;
+			}
+			return false;
+		}
+		return true;
+	}
+	
+	private List<User> getGostiDomacina(UserDAO users, User loggedIn, ApartmanDAO apartmani){
+		HashMap<UUID, User> usersArray = new HashMap<UUID, User>();
+		ArrayList<Apartman> aktivni = new ArrayList<Apartman>();
+		
+		for(Apartman a : apartmani.getApartmani().values()) {
+			if( (a.getStatus() == 0) && (a.getDomacin().getId().equals(loggedIn.getId())) ) { //DOBAVLJA SAMO AKTIVNE APARTMANE
+				aktivni.add(a);		
+			}
+		}
+		for(Apartman a : aktivni) {
+			if(a.getRezervacije() != null) {
+				for(Rezervacija r : a.getRezervacije()) {
+					User gostRezervacija = users.findUser(r.getGost());
+					if(gostRezervacija != null) {
+						usersArray.put(gostRezervacija.getId(), gostRezervacija);
+					}
+				}
+			}
+		}
+		
+		List<User> unique = new ArrayList<User>();
+		for(User u : usersArray.values()) {
+			unique.add(u);
+		}
+		System.out.println("Svi korisnici su: " + usersArray);
+		System.out.println("Jedinstveni korisnici su: " + unique);
+		
+		return unique;
 	}
 	
 	@GET

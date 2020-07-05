@@ -94,6 +94,7 @@ function ispisiKorisnike(user){
 	div.append(div2);
 }
 
+
 function ispisiDomacine(user){
 	
 	let div = $('#domaciniDIV');
@@ -261,7 +262,8 @@ function prikazKomentara(apartman){
 	
 	if(apartman.komentari != null){
 		for(let koment of apartman.komentari){
-			let a = $('<div style="border-style: solid;"><p>Komentar: ' + koment.text + '</p><p>Ocena: ' + koment.ocena + '</p></div>');
+			let gostKomentar = dobaviGostaKomentara(koment.gost);
+			let a = $('<div style="border-style: solid;"><p>Gost: ' + gostKomentar.userName + '</p><p>Komentar: ' + koment.text + '</p><p>Ocena: ' + koment.ocena + '</p></div>');
 			div.append(a);
 		}
 	}
@@ -269,6 +271,25 @@ function prikazKomentara(apartman){
 	//div.append(komentarDiv);
 	div.hide();
 	return div;
+}
+
+function dobaviGostaKomentara(gost){
+	var obj = {"gost": gost};
+	var gost
+	
+	$.ajax({
+		url: 'rest/apartman/komentar/gost',
+		type: 'POST',
+		contentType : 'application/json',
+		data: JSON.stringify(obj),
+		success : function(response){
+			gost = response;
+		},
+		error : function(response){
+			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+		}
+	});
+	return gost;
 }
 
 //**********************************************************************************************
