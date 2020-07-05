@@ -83,6 +83,7 @@ public class Apartman{
 		this.vremeZaPrijavu = a.getVremeZaPrijavu();
 		this.vremeZaOdjavu = a.getVremeZaOdjavu();
 		this.lokacija = a.getLokacija();
+		this.brojGostiju = a.getBrojGostiju();
 		//this.rezervacije = a.getRezervacije();
 	}
 

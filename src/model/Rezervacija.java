@@ -47,6 +47,17 @@ public class Rezervacija {
 		this.status = status;
 	}
 	
+	public Rezervacija(Rezervacija r) {
+		this.id = r.getId();
+		this.apartman = r.getApartman();
+		this.pocetakIznajmljivanja = r.getPocetakIznajmljivanja();
+		this.brojNocenja = r.getBrojNocenja();
+		this.ukupnaCena = r.getUkupnaCena();
+		this.poruka = r.getPoruka();
+		this.gost = r.getGost();
+		this.status = r.getStatus();
+	}
+	
 	public UUID getId() {
 		return id;
 	}
