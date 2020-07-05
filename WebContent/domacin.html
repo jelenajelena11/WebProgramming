@@ -22,24 +22,85 @@
 			<li id="dodajApartman">Dodaj apartman</li>
 			<li id="pregledKorisnika">Pregled korisnika</li>
 			<li id="apartmani">Apartmani</li>
-			<li id="noveRezervacije">Nove Rezervacije</li>
+			<li id="noveRezervacije">Rezervacije</li>
 			<li id="odjava">Logout</li>
 		</ul>
 	</div>
 
-	<div id="domaciniDIV" style="width: 400px;margin-left: 450px; margin-right: 220px;">
+	<div id="originDiv" style="width:600px; height: 800px; margin-left: 350px; margin-right: 120px;">
+		<div id="domaciniDIV" style="width: 400px; height: 800px; float: left;">
+		
+		</div>
+		<div id="searchDiv" style="width: 200px; height: 800px; float: right;">
+			<div>
+				<p>Unesi mesto:</p>
+				<input id="inputMesto" type="text" placeholder="Novi Sad" />
+			</div>
+			<div>
+				<p>Unesi cenu:</p>
+				<input id="inputCena" type="text" placeholder="E.g. 40 {$}" />
+			</div>
+			<div>
+				<p>Unesi datum dolaska:</p>
+				<input id="inputDolazak" type="text" class="datepicker" />
+				
+				<p>Unesi datum odlaska:</p>
+				<input id="inputOdlazak" type="text" class="datepicker"  />
+			</div>
+			<div>
+				<p>Unesi broj soba:</p>
+				<input id="inputBrojSoba" type="text" placeholder="E.g. 3" />
+			</div>
+			<div>
+				<p>Unesi broj gostiju:</p>
+				<input id="inputBrojGostiju" type="text" placeholder="E.g. 4" />
+			</div>
+			
+			<div>
+				<p>Sortiraj po ceni:</p>
+				<input type="radio" name="cena" id="rastuce">Rastuce<br>
+				<input type="radio" name="cena" id="opadajuce">Opadajuce<br>
+			</div>
+			
+			<div>
+				<p>Tip apartmana:</p>
+				<input type="radio" name="tip" id="ceo">Ceo<br>
+				<input type="radio" name="tip" id="soba">Soba<br>
+			</div>
+			
+			<div>
+				<p>Status apartmana:</p>
+				<input type="radio" name="status" id="aktivan">Aktivan<br>
+				<input type="radio" name="status" id="neaktivan">Neaktivan<br>
+			</div>
+			
+			<div id="sortirajRezervacije">
+				<p>Sortiraj Rezervacije po ceni:</p>
+				<input type="radio" name="cenaRezervacija" id="rastuceRezervacija">Rastuce<br>
+				<input type="radio" name="cenaRezervacija" id="opadajuceRezervacija">Opadajuce<br>
+			</div> 
+			
+			<div id="statusRezervacije">
+				<p>Status Rezervacije:</p>
+				<input type="radio" name="statusRezervacije" id="kreiraneRezervacije">Kreirane<br>
+				<input type="radio" name="statusRezervacije" id="odbijeneRezervacije">Odbijene<br>
+				<input type="radio" name="statusRezervacije" id="odustaleRezervacije">Odustale<br>
+				<input type="radio" name="statusRezervacije" id="prihvaceneRezervacije">Prihvacene<br>
+				<input type="radio" name="statusRezervacije" id="zavrseneRezervacije">Zavrsene<br>
+			</div>
+			
+			<div>
+				<button id="pretrazi">Pretrazi</button>
+			</div>
+		</div>
+	</div>
+	
+	<div id="korisniciDIV" style="width:600px; height: 800px; margin-left: 350px; margin-right: 120px;">
 		
 	</div>
 	
-	<div id="korisniciDIV" style="width: 400px;margin-left: 450px; margin-right: 220px;">
-		
-	</div>
 	
-
-<!-- <ul>
-		
-		<li> <button id="odjava">Logout</button> </li>
-		<!-- <li> <a href="#odjavaa">Logout</a> </li> -->
+	
 
 <!-- Bootstrap core JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

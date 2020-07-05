@@ -41,6 +41,7 @@
 		<ul>
 			<li id="apartmani">Apartmani</li>
 			<li id="pendingRezervacije">Moje rezervacije</li>
+			<li id="prihvaceneRezervacije">Prihvacene rezervacije</li>
 			<li id="podaci">Moji podaci</li>
 			<li id="odjava">Logout</li>
 		</ul>
@@ -74,6 +75,19 @@
 				<p>Unesi broj gostiju:</p>
 				<input id="inputBrojGostiju" type="text" placeholder="E.g. 4" />
 			</div>
+			
+			<div>
+				<p>Sortiraj po ceni::</p>
+				<input type="radio" name="cena" id="rastuce">Rastuce<br>
+				<input type="radio" name="cena" id="opadajuce">Opadajuce<br>
+			</div>
+			
+			<div id="sortirajRezervacije">
+				<p>Sortiraj Rezervacije po ceni::</p>
+				<input type="radio" name="cenaRezervacija" id="rastuceRezervacija">Rastuce<br>
+				<input type="radio" name="cenaRezervacija" id="opadajuceRezervacija">Opadajuce<br>
+			</div> 
+			
 			<div>
 				<button id="pretrazi">Pretrazi</button>
 			</div>

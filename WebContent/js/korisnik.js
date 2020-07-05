@@ -1,6 +1,7 @@
 $(document).ready(function(){
 	
 	document.getElementById('searchDiv').style.visibility = "hidden";
+	document.getElementById('sortirajRezervacije').style.visibility = "hidden";
 	
 	$('#podaciDiv').html('');
 	
@@ -13,7 +14,9 @@ $(document).ready(function(){
 	
 	$('#pendingRezervacije').click(pendingRezervacije());
 	
-	$('#pretrazi').click(pretraziApartmane());
+	$('#prihvaceneRezervacije').click(acceptedRezervacije());
+	
+	$('#pretrazi').click(provjeriPretragu());
 	
 	//*************************************************************
 	//Datepicker
@@ -47,6 +50,7 @@ function prikaziPodatke(){
 		event.preventDefault();
 		
 		$('#podaciDiv').html('');
+		document.getElementById('sortirajRezervacije').style.visibility = "hidden";
 		
 		$.ajax({
 			url: 'rest/user/korisnik',
@@ -86,6 +90,7 @@ function prikaziApartmane(){
 		event.preventDefault();
 		
 		$('#podaciDiv').html('');
+		document.getElementById('sortirajRezervacije').style.visibility = "hidden";
 		
 		$.ajax({
 			url: 'rest/apartman',
@@ -289,6 +294,7 @@ function pendingRezervacije(){
 		
 		console.log('Usao u prendingRezervacije function.');
 		$('#podaciDiv').html('');
+		document.getElementById('sortirajRezervacije').style.visibility = "visible";
 		
 		$.ajax({
 			url: 'rest/rezervacija',
@@ -299,7 +305,7 @@ function pendingRezervacije(){
 					console.log(res);
 					ispisiApartmanRezervacija(res);
 				}
-				document.getElementById('searchDiv').style.visibility = "hidden";
+				document.getElementById('searchDiv').style.visibility = "visible";
 			},
 			error : function(response){
 				console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
@@ -310,17 +316,19 @@ function pendingRezervacije(){
 
 function ispisiApartmanRezervacija(apartman){
 	let original = $('#podaciDiv');
+	//let originDiv = $('#originDiv');
 	let divRez = $('<div style="border-style: solid; border-width: medium; margin-top: 20px; background-color: rgb(190, 188, 255);"></div>');
+	
+	//let ispisiSearch = $('<div style="height=100px"><h1>Ovde dodje Search</h1></div>');
 	
 	let podaciRez = ispisiPodatkeApartmanRezervacijaDIV(apartman);
 	let slikaRez = ispisiSlikuDIV(apartman);
 	let datumVazenjaRez = ispisiTerminDatuma(apartman);
 	
-	let lokacijaRez = ispisiLokaciju(apartman);
-	//let button = ispisiButton(apartman);
-	//let rezervacija = ispisiRezervacijaZakazivanje(apartman);
+	let lokacijaRez = ispisiLokaciju(apartman)
 	let ispisPodaciRez = ispisiPodatkeRezervacije(apartman);
 	
+	//originDiv.append(ispisiSearch);
 	divRez.append(podaciRez).append(datumVazenjaRez).append(slikaRez).append(lokacijaRez).append(ispisPodaciRez);//.append(rezervacija).append(button);
 	
 	original.append(divRez);
@@ -386,8 +394,9 @@ function odustaniOdRezervacije(rezervacija){
 }
 
 //*********************************************************************************************************
-//Pretraga
-function pretraziApartmane(){
+//Pretrage
+
+function provjeriPretragu(){
 	return function(event){
 		event.preventDefault();
 		
@@ -442,19 +451,112 @@ function pretraziApartmane(){
 			brojGostiju = brojGostijuElem; 
 		}
 		
-		var obj = {"mesto": mesto, "cena": cena, "dolazak": dolazak, "odlazak": odlazak, "brojSoba": brojSoba,
-							"brojGostiju": brojGostiju};
+		var rastuceElem = document.getElementById('rastuce').checked;
+		var opadajuceElem = document.getElementById('opadajuce').checked;
+		var sortiraj;
+		if(rastuceElem == true){
+			sortiraj = "rastuce";
+		}else if(opadajuceElem){
+			sortiraj = "opadajuce";
+		}else{
+			sortiraj = "";
+		}
+		console.log(sortiraj);
+		
+		var sortirajRezervacije = document.getElementById('sortirajRezervacije').style.visibility;
+		if(sortirajRezervacije == "hidden"){
+			pretraziApartmane(mesto, cena, dolazak, odlazak, brojSoba, brojGostiju, sortiraj);
+		}else{
+			
+			var rastuceRezElem = document.getElementById('rastuceRezervacija').checked;
+			var opadajuceRezElem = document.getElementById('opadajuceRezervacija').checked;
+			var sortirajRez;
+			if(rastuceRezElem == true){
+				sortirajRez = "rastuceRez";
+			}else if(opadajuceRezElem){
+				sortirajRez = "opadajuceRez";
+			}else{
+				sortirajRez = "";
+			}
+			
+			pretraziApartmaneRezervacijaSortiraj(mesto, cena, dolazak, odlazak, brojSoba, brojGostiju, sortiraj, sortirajRez)
+		}
+	}
+}
+
+function pretraziApartmaneRezervacijaSortiraj(mesto, cena, dolazak, odlazak, brojSoba, brojGostiju, sortiraj, sortirajRez){
+	$('#podaciDiv').html('');
+	
+	
+	
+	var obj = {"mesto": mesto, "cena": cena, "dolazak": dolazak, "odlazak": odlazak, "brojSoba": brojSoba,
+						"brojGostiju": brojGostiju, "sortiraj": sortiraj, "sortirajRez" : sortirajRez};
+	
+	$.ajax({
+		url: 'rest/rezervacija/search',
+		type: 'POST',
+		contentType : 'application/json',
+		data: JSON.stringify(obj),
+		success : function(response){
+			for(let res of response){
+				console.log(res);
+				ispisiApartmanRezervacija(res);
+			}
+		},
+		error : function(response){
+			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+		}
+	});
+}
+
+function pretraziApartmane(mesto, cena, dolazak, odlazak, brojSoba, brojGostiju, sortiraj){
+	$('#podaciDiv').html('');
+	
+	
+	
+	var obj = {"mesto": mesto, "cena": cena, "dolazak": dolazak, "odlazak": odlazak, "brojSoba": brojSoba,
+						"brojGostiju": brojGostiju, "sortiraj": sortiraj};
+	
+	$.ajax({
+		url: 'rest/apartman/search',
+		type: 'POST',
+		contentType : 'application/json',
+		data: JSON.stringify(obj),
+		success : function(response){
+			for(let res of response){
+				console.log(res);
+				ispisiApartmane(res);
+			}
+		},
+		error : function(response){
+			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+		}
+	});
+}
+
+//***********************************************************************************************
+
+//Prikaz prihvacenih rezervacija gosta
+
+function acceptedRezervacije(){
+
+	return function(event){
+		event.preventDefault();
+		
+		console.log('Usao u prendingRezervacije function.');
+		$('#podaciDiv').html('');
+		document.getElementById('sortirajRezervacije').style.visibility = "hidden";
 		
 		$.ajax({
-			url: 'rest/apartman/search',
-			type: 'POST',
+			url: 'rest/rezervacija/accepted',
+			type: 'GET',
 			contentType : 'application/json',
-			data: JSON.stringify(obj),
 			success : function(response){
 				for(let res of response){
 					console.log(res);
-					ispisiApartmane(res);
+					ispisiApartmanRezervacija(res);
 				}
+				document.getElementById('searchDiv').style.visibility = "hidden";
 			},
 			error : function(response){
 				console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');

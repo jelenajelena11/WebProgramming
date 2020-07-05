@@ -2,6 +2,8 @@ package services;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -19,6 +21,7 @@ import javax.ws.rs.core.Response;
 import dao.ApartmanDAO;
 import model.Adresa;
 import model.Apartman;
+import model.User;
 
 @Path("/apartman")
 public class ApartmanService {
@@ -56,7 +59,7 @@ public class ApartmanService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getApartmaniSearch(@Context HttpServletRequest request, String search) {
-		
+		User loggedIn = (User) request.getSession().getAttribute("user");
 		ApartmanDAO apartmani = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
 		List<Apartman> aktivni = new ArrayList<Apartman>();
 		
@@ -68,26 +71,48 @@ public class ApartmanService {
 		String odlazak = ((searchArray[3]).split(":"))[1];
 		String brojSoba = ((searchArray[4]).split(":"))[1];
 		String brojGostiju = ((searchArray[5]).split(":"))[1];
-		System.out.println("Mesto: " + mesto);
-		System.out.println("cena " + cena);
-		System.out.println("dolazak " + dolazak);
-		System.out.println("odlazak " + odlazak );
-		System.out.println("brojSoba " + brojSoba);
-		System.out.println("brojGostiju " + brojGostiju);
+		String sortiraj = ((searchArray[6]).split(":"))[1];
+		sortiraj = sortiraj.replace("\"", "");
+		sortiraj = sortiraj.replace("}", "");
 		
-		for(Apartman a : apartmani.getApartmani().values()) {
-			if(a.getStatus() == 0 && this.isMestoValid(a.getLokacija().getAdresa().getMesto(), mesto)
-					&& this.isCenaValid(a.getCenaPoNoci(), cena) 
-					&& this.isDolazakValid(a.getDatePocetakVazenja(), dolazak)
-					&&  this.isOdlazakValid(a.getKrajPocetakVazenja(), odlazak)
-					&& this.isBrojSobaValid(a.getBrojSoba(), brojSoba) 
-					&& this.isBrojGostijuValid(a.getBrojGostiju(), brojGostiju)) {		
-								//Dobavlja samo aktivne apartmane
-								
-				aktivni.add(a);			
+		if(loggedIn.getUloga() == 0) {
+			for(Apartman a : apartmani.getApartmani().values()){
+				if(a.getStatus() == 0 && this.isMestoValid(a.getLokacija().getAdresa().getMesto(), mesto)
+						&& this.isCenaValid(a.getCenaPoNoci(), cena) 
+						&& this.isDolazakValid(a.getDatePocetakVazenja(), dolazak)
+						&&  this.isOdlazakValid(a.getKrajPocetakVazenja(), odlazak)
+						&& this.isBrojSobaValid(a.getBrojSoba(), brojSoba) 
+						&& this.isBrojGostijuValid(a.getBrojGostiju(), brojGostiju)) {		
+									//Dobavlja samo aktivne apartmane
+									
+					aktivni.add(a);			
+				}
 			}
+		}else {
+			String sortirajTip = ((searchArray[7]).split(":"))[1];
+			String sortirajStatus = ((searchArray[8]).split(":"))[1];
 			
+			for(Apartman a : apartmani.getApartmani().values()) {
+				if(this.isMestoValid(a.getLokacija().getAdresa().getMesto(), mesto)
+						&& this.isCenaValid(a.getCenaPoNoci(), cena) 
+						&& this.isDolazakValid(a.getDatePocetakVazenja(), dolazak)
+						&&  this.isOdlazakValid(a.getKrajPocetakVazenja(), odlazak)
+						&& this.isBrojSobaValid(a.getBrojSoba(), brojSoba) 
+						&& this.isBrojGostijuValid(a.getBrojGostiju(), brojGostiju)
+						&& this.isTipValid(a.getTipSobe(), sortirajTip)
+						&& this.isStatusValid(a.getStatus(), sortirajStatus)) {	
+									
+					aktivni.add(a);			
+				}
+			}
 		}
+		
+		if(sortiraj.equals("rastuce")) {
+			Collections.sort(aktivni, new CompareApartmanRastuce());
+		}else if(sortiraj.equals("opadajuce")) {
+			Collections.sort(aktivni, new CompareApartmanOpadajuce());
+		}
+		
 		System.out.println("Pronadjeni apartmani: " + aktivni);
 		return Response.ok(aktivni).build();
 	}
@@ -185,7 +210,7 @@ public class ApartmanService {
 	private boolean isBrojGostijuValid(int brojGostiju, String toSearch) {
 		if(!toSearch.equals("")) {
 			toSearch = toSearch.replace("\"", "");
-			toSearch = toSearch.replace("}", "");
+			//toSearch = toSearch.replace("}", "");
 			System.out.println("BrojGostijuValid: " + toSearch);
 			if(toSearch.equals("")) {
 				return true;
@@ -198,5 +223,57 @@ public class ApartmanService {
 			return false;
 		}
 		return true;
+	}
+	private boolean isTipValid(int tip, String toSearch) {
+		if(!toSearch.equals("")) {
+			toSearch = toSearch.replace("\"", "");
+			System.out.println("tipValid: " + toSearch);
+			if(toSearch.equals("")) {
+				return true;
+			}
+			
+			int tipSearch = Integer.parseInt(toSearch);
+			if(tip == tipSearch) {
+				return true;
+			}
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean isStatusValid(int status, String toSearch) {
+		if(!toSearch.equals("")) {
+			toSearch = toSearch.replace("\"", "");
+			toSearch = toSearch.replace("}", "");
+			System.out.println("statusValid: " + toSearch);
+			if(toSearch.equals("")) {
+				return true;
+			}
+			
+			int statusSearch = Integer.parseInt(toSearch);
+			if(status == statusSearch) {
+				return true;
+			}
+			return false;
+		}
+		return true;
+	}
+}
+
+class CompareApartmanRastuce implements Comparator<Apartman> {
+	
+	@Override
+	public int compare(Apartman o1, Apartman o2) {
+		
+		return (o1.getCenaPoNoci() - o2.getCenaPoNoci());
+	}
+}
+
+class CompareApartmanOpadajuce implements Comparator<Apartman> {
+	
+	@Override
+	public int compare(Apartman o1, Apartman o2) {
+		
+		return (o2.getCenaPoNoci() - o1.getCenaPoNoci());
 	}
 }
