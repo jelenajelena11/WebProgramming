@@ -7,7 +7,7 @@
     "ukupnaCena" : 100,
     "poruka" : "",
     "gost" : "4cfb7410-1cfa-4d7d-9f36-cd11e6d24108",
-    "status" : 0
+    "status" : 4
   },
   "085aea81-2a4a-4f88-be86-b684822f70d3" : {
     "id" : "085aea81-2a4a-4f88-be86-b684822f70d3",
