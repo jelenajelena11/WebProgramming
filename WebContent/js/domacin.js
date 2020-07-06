@@ -182,11 +182,12 @@ function ispisiApartmane(apartman){
 	let datumVazenja = ispisiTerminDatuma(apartman);
 	let lokacija = ispisiLokaciju(apartman);
 	let button = ispisiButton(apartman);
+	let obrisi = ispisiButtonObrisi(apartman);
 	let aktivnost = ispisiButtonAktivnost(apartman);
 	let komentari = ispisiButtonKomentariApartman(apartman);
 	let sviKomentari = prikazKomentara(apartman);
 	
-	div.append(podaci).append(datumVazenja).append(slika).append(lokacija).append(aktivnost).append(button).append(sviKomentari).append(komentari);
+	div.append(podaci).append(datumVazenja).append(slika).append(lokacija).append(obrisi).append(aktivnost).append(button).append(sviKomentari).append(komentari);
 	divOrigin.append(div);
 }
 
@@ -282,6 +283,36 @@ function ispisiButton(apartman){
 	});
 	
 	return button;
+}
+
+function ispisiButtonObrisi(apartman){
+
+	let button;
+	if(!apartman.obrisan){
+		button = $('<button id="obrisiApartman' + apartman.id + '" style="margin-left: 20px; width: 90%;"> Obrisi </button>');
+		
+		button.on('click', function(event){
+			obrisi(apartman.id);
+		});
+	}
+	
+	return button;
+}
+function obrisi(id){
+	var obj = {"id": id};
+	
+	$.ajax({
+		url: 'rest/apartman',
+		type: 'DELETE',
+		contentType : 'application/json',
+		data: JSON.stringify(obj),
+		success : function(response){
+		},
+		error : function(response){
+			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+		}
+	});
+	
 }
 
 function ispisiButtonAktivnost(apartman){

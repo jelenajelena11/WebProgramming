@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -50,7 +51,7 @@ public class ApartmanService {
 		List<Apartman> aktivni = new ArrayList<Apartman>();
 		
 		for(Apartman a : apartmani.getApartmani().values()) {
-			if(a.getStatus() == 0) {		//Dobavlja samo aktivne apartmane
+			if(a.getStatus() == 0 && (!a.isObrisan())) {		//Dobavlja samo aktivne apartmane
 				aktivni.add(a);
 			}
 		}
@@ -99,7 +100,7 @@ public class ApartmanService {
 		
 		if(loggedIn.getUloga() == 0) {
 			for(Apartman a : apartmani.getApartmani().values()){
-				if(a.getStatus() == 0 && this.isMestoValid(a.getLokacija().getAdresa().getMesto(), mesto)
+				if((!a.isObrisan()) && a.getStatus() == 0 && this.isMestoValid(a.getLokacija().getAdresa().getMesto(), mesto)
 						&& this.isCenaValid(a.getCenaPoNoci(), cena) 
 						&& this.isDolazakValid(a.getDatePocetakVazenja(), dolazak)
 						&&  this.isOdlazakValid(a.getKrajPocetakVazenja(), odlazak)
@@ -211,6 +212,20 @@ public class ApartmanService {
 		
 		ap.setStatus(1); 		//Status na neaktivan
 		apartmani.saveApartmani("");
+		
+		return Response.ok().build();
+	}
+	@DELETE
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response obrisiApartman(@Context HttpServletRequest request, Apartman a) {
+		
+		ApartmanDAO apartmani = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
+		Apartman ap = apartmani.findOneApartman(a.getId());
+		
+		ap.setObrisan(true); 		//Obrisan
+		//apartmani.saveApartmani("");
+		System.out.println("Obrisan je: " + ap);
 		
 		return Response.ok().build();
 	}

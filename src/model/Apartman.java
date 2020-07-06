@@ -14,6 +14,8 @@ public class Apartman{
 	private String datePocetakVazenja;
 	private String krajPocetakVazenja;
 	
+	private boolean obrisan = false;
+	
 	private User domacin;
 	private List<Komentar> komentari = new ArrayList<Komentar>();
 	private String slika;	//Putanja samo 1 slike
@@ -26,7 +28,7 @@ public class Apartman{
 	private List<Rezervacija> rezervacije = new ArrayList<Rezervacija>();
 	
 	public Apartman(int tipSobe, int brojSoba, int brojGostiju, Lokacija lokacija,
-			String datePocetakVazenja, String krajPocetakVazenja, User domacin, List<Komentar> komentari,
+			String datePocetakVazenja, String krajPocetakVazenja, boolean obrisan, User domacin, List<Komentar> komentari,
 			String slika, int cenaPoNoci, String vremeZaPrijavu, String vremeZaOdjavu, int status,
 			List<SadrzajApartmana> sadrzajApartmana, List<Rezervacija> rezervacije) {
 		super();
@@ -46,10 +48,11 @@ public class Apartman{
 		this.status = status;
 		this.sadrzajApartmana = sadrzajApartmana;
 		this.rezervacije = rezervacije;
+		this.obrisan = obrisan;
 	}
 	
 	public Apartman(UUID id, int tipSobe, int brojSoba, int brojGostiju, Lokacija lokacija,
-			String datePocetakVazenja, String krajPocetakVazenja, User domacin, List<Komentar> komentari,
+			String datePocetakVazenja, String krajPocetakVazenja, boolean obrisan, User domacin, List<Komentar> komentari,
 			String slika, int cenaPoNoci, String vremeZaPrijavu, String vremeZaOdjavu, int status,
 			List<SadrzajApartmana> sadrzajApartmana, List<Rezervacija> rezervacije) {
 		super();
@@ -69,6 +72,7 @@ public class Apartman{
 		this.status = status;
 		this.sadrzajApartmana = sadrzajApartmana;
 		this.rezervacije = rezervacije;
+		this.obrisan = obrisan;
 	}
 	
 	public Apartman(Apartman a) {
@@ -84,6 +88,7 @@ public class Apartman{
 		this.vremeZaOdjavu = a.getVremeZaOdjavu();
 		this.lokacija = a.getLokacija();
 		this.brojGostiju = a.getBrojGostiju();
+		this.obrisan = a.isObrisan();
 		//this.rezervacije = a.getRezervacije();
 	}
 
@@ -161,6 +166,14 @@ public class Apartman{
 
 	public void setVremeZaOdjavu(String vremeZaOdjavu) {
 		this.vremeZaOdjavu = vremeZaOdjavu;
+	}
+
+	public boolean isObrisan() {
+		return obrisan;
+	}
+
+	public void setObrisan(boolean obrisan) {
+		this.obrisan = obrisan;
 	}
 
 	public User getDomacin() {
