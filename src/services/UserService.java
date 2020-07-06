@@ -160,7 +160,7 @@ public class UserService {
 	@Path("/domacin/gost/search")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<User> getUsersDomacinaSearch(@Context HttpServletRequest request, String search) {
+	public Response getUsersDomacinaSearch(@Context HttpServletRequest request, String search) {
 		UserDAO users = (UserDAO) ctx.getAttribute("userDAO");
 		User loggedIn = (User) request.getSession().getAttribute("user");
 		ApartmanDAO apartmani = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
@@ -178,13 +178,12 @@ public class UserService {
 		for(User u : unique) {
 			if(this.isUsernameValid(u.getUserName(), username)
 					&& this.isImeValid(u.getFirstName(), ime)
-					&& this.isPrezimeValid(u.getLastName(), prezime)
-					&& this.isPolValid(u.getGender(), pol)) {
+					&& this.isPrezimeValid(u.getLastName(), prezime)) {
 				ok.add(u);
 			}
 		}
-		
-		return ok;
+		System.out.println(ok);
+		return Response.ok(ok).build();
 	}
 	private boolean isUsernameValid(String username, String toSearch) {
 		if(!toSearch.equals("")) {

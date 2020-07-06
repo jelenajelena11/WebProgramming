@@ -97,10 +97,11 @@ public class ApartmanService {
 		postoji.setCenaPoNoci(a.getCenaPoNoci());
 		postoji.setDatePocetakVazenja(a.getDatePocetakVazenja());
 		postoji.setKrajPocetakVazenja(a.getKrajPocetakVazenja());
+		postoji.setVremeZaPrijavu(a.getVremeZaPrijavu());
+		postoji.setVremeZaOdjavu(a.getVremeZaOdjavu());
 		System.out.println("Izmenjen apartman: " + postoji);
 		
-		//aDAO.getApartmani().put(a.getId(), a);
-		//ctx.setAttribute("apartmanDAO", aDAO);
+		aDAO.saveApartmani("");
 		return Response.status(200).build();
 	}
 

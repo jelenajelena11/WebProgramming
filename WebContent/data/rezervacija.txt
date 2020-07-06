@@ -1,30 +1,10 @@
 {
-  "22cc2656-048e-44cd-bd87-ba2272798375" : {
-    "id" : "22cc2656-048e-44cd-bd87-ba2272798375",
-    "apartman" : "35a44995-7ee3-416e-a3b5-860e2c199755",
-    "pocetakIznajmljivanja" : "2020-09-01",
-    "brojNocenja" : 4,
-    "ukupnaCena" : 240,
-    "poruka" : "poruka1",
-    "gost" : "4cfb7410-1cfa-4d7d-9f36-cd11e6d24108",
-    "status" : 1
-  },
   "a4d877df-ae7b-4896-9467-be26a1b5d45c" : {
     "id" : "a4d877df-ae7b-4896-9467-be26a1b5d45c",
     "apartman" : "36d59ee6-ad41-4a93-ab02-a84d73e22f5a",
     "pocetakIznajmljivanja" : "2020-06-27",
     "brojNocenja" : 2,
     "ukupnaCena" : 100,
-    "poruka" : "",
-    "gost" : "4cfb7410-1cfa-4d7d-9f36-cd11e6d24108",
-    "status" : 4
-  },
-  "111d42c8-8420-484d-a7a5-16d78444341a" : {
-    "id" : "111d42c8-8420-484d-a7a5-16d78444341a",
-    "apartman" : "25928803-ace8-4d1b-9502-6299dc7eaf28",
-    "pocetakIznajmljivanja" : "2020-07-03",
-    "brojNocenja" : 2,
-    "ukupnaCena" : 140,
     "poruka" : "",
     "gost" : "4cfb7410-1cfa-4d7d-9f36-cd11e6d24108",
     "status" : 4
@@ -37,27 +17,7 @@
     "ukupnaCena" : 250,
     "poruka" : "",
     "gost" : "4cfb7410-1cfa-4d7d-9f36-cd11e6d24108",
-    "status" : 1
-  },
-  "c2725ddb-f565-4286-a8a3-32ade80a15b9" : {
-    "id" : "c2725ddb-f565-4286-a8a3-32ade80a15b9",
-    "apartman" : "25928803-ace8-4d1b-9502-6299dc7eaf28",
-    "pocetakIznajmljivanja" : "2020-07-01",
-    "brojNocenja" : 2,
-    "ukupnaCena" : 140,
-    "poruka" : "",
-    "gost" : "35e78f81-cc2f-49a1-8c25-873797d735d9",
-    "status" : 4
-  },
-  "1bfcc461-c6d7-4191-a3f7-cd19dd61eeef" : {
-    "id" : "1bfcc461-c6d7-4191-a3f7-cd19dd61eeef",
-    "apartman" : "25928803-ace8-4d1b-9502-6299dc7eaf28",
-    "pocetakIznajmljivanja" : "2020-08-01",
-    "brojNocenja" : 3,
-    "ukupnaCena" : 210,
-    "poruka" : "neka poruka",
-    "gost" : "35e78f81-cc2f-49a1-8c25-873797d735d9",
-    "status" : 2
+    "status" : 0
   },
   "52d59d79-e06e-45eb-9c34-78a84510aed9" : {
     "id" : "52d59d79-e06e-45eb-9c34-78a84510aed9",
@@ -67,16 +27,6 @@
     "ukupnaCena" : 350,
     "poruka" : "poruka5",
     "gost" : "4cfb7410-1cfa-4d7d-9f36-cd11e6d24108",
-    "status" : 3
-  },
-  "814a08b2-abb5-4c39-b67b-340f2294aeda" : {
-    "id" : "814a08b2-abb5-4c39-b67b-340f2294aeda",
-    "apartman" : "25928803-ace8-4d1b-9502-6299dc7eaf28",
-    "pocetakIznajmljivanja" : "2020-11-01",
-    "brojNocenja" : 6,
-    "ukupnaCena" : 420,
-    "poruka" : "asd",
-    "gost" : "4cfb7410-1cfa-4d7d-9f36-cd11e6d24108",
-    "status" : 2
+    "status" : 0
   }
 }

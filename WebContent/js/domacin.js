@@ -67,6 +67,7 @@ function ispisiKorisnike(users){
 	//let userName = $('<h4>Username: </h4'+user.getUserName);
 	//let ime = $('<h4>Ime: </h4>'+user.getFirstName);
 	let pretraga = ispisiPretragu();
+	console.log(users);
 	let naziv = $('<h3>Pregled svih korisnika:</h3>')
 	//let tabela = $('<table><tr><th> Username: </th> <th>'+user.userName+' </th></tr><tr><th>Ime:</th><th>'+user.firstName+'</th></tr><tr><th> Prezime:</th><th>'+user.lastName+'</th></tr><tr><th>Pol: </th><th>'+user.gender+' </th></tr><tr><th> Lozinka: </th><th>'+user.password+'</th></tr></table>');
 	let tabela = $('<table border="1"><th>Korisnicko Ime</th><th>Ime</th><th>Prezime</th><th>Email</th><th>Adresa</th> </table>');
@@ -321,9 +322,10 @@ function obrisi(id){
 		contentType : 'application/json',
 		data: JSON.stringify(obj),
 		success : function(response){
+			alert('Uspesno ste obrisali apartman');
 		},
 		error : function(response){
-			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+			alert('Ups, ne mozete trenutno obrisati apartman.');
 		}
 	});
 	
@@ -357,9 +359,10 @@ function promeniNaNeaktivan(apartman){
 		contentType : 'application/json',
 		data: JSON.stringify(obj),
 		success : function(response){
+			alert('Apartman je sada neaktivan');
 		},
 		error : function(response){
-			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+			alert('Ups, ne mozete promeniti aktivnost apartmana');
 		}
 	});
 }
@@ -373,9 +376,10 @@ function promeniNaAktivan(apartman){
 		contentType : 'application/json',
 		data: JSON.stringify(obj),
 		success : function(response){
+			alert('Apartman je sada aktivan');
 		},
 		error : function(response){
-			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+			alert('Ups, ne mozete promeniti aktivnost apartmana');
 		}
 	});
 }
@@ -412,6 +416,13 @@ function editovanjeApartmana(apartman){
 	let cenaPoNoci = $('<p>Cena po noci:</p>');
 	let inputcenaPoNoci = $('<input type="text" id="inputcenaPoNoci' + apartman.id + '" value="' + apartman.cenaPoNoci + '"/>');
 
+	let vremeZaPrijavu = $('<p>Prijava:</p>');
+	let inputvremeZaPrijavu = $('<input type="text" id="inputvremeZaPrijavu' + apartman.id + '" value="' + apartman.vremeZaPrijavu + '" placeholder="E.g. 12:00" />');
+	
+	let vremeZaOdjavu = $('<p>Odjava:</p>');
+	let inputvremeZaOdjavu = $('<input type="text" id="inputvremeZaOdjavu' + apartman.id + '" value="' + apartman.vremeZaOdjavu + '"  placeholder="E.g. 12:00" />');
+	
+	
 	let divDate = $('<div id="edit' + apartman.id + '"class="input-group date"></div>');
 	
 	let datePocetakVazenja = $('<p>Pocetak vazenja:</p>');
@@ -435,22 +446,44 @@ function editovanjeApartmana(apartman){
 		let inputcenaPoNociEdit = document.getElementById('inputcenaPoNoci' + apartman.id).value;
 		let inputdatePocetakVazenjaEdit = document.getElementById('inputdatePocetakVazenja' + apartman.id).value;
 		let inputkrajPocetakVazenjaEdit = document.getElementById('inputkrajPocetakVazenja' + apartman.id).value;
+		let inputvremeZaPrijavuEdit = document.getElementById('inputvremeZaPrijavu' + apartman.id).value;
+		let inputvremeZaOdjavuEdit = document.getElementById('inputvremeZaOdjavu' + apartman.id).value;
 		
-		posaljiIzmene(apartman.id, inputBrGostijuEdit, inputBrSobaEdit, inputcenaPoNociEdit, inputdatePocetakVazenjaEdit, inputkrajPocetakVazenjaEdit);
+		if(inputBrGostijuEdit == null || inputBrGostijuEdit == undefined || inputBrGostijuEdit == ""){
+			alert('Broj gostiju ne smije biti prazan');
+		}else if(inputBrSobaEdit == null || inputBrSobaEdit == undefined || inputBrSobaEdit == ""){
+			alert('Broj soba ne smije biti prazan');
+		}else if(inputcenaPoNociEdit == null || inputcenaPoNociEdit == undefined || inputcenaPoNociEdit == ""){
+			alert('Cena po noci ne smije biti prazna');
+		}else if(inputdatePocetakVazenjaEdit == null || inputdatePocetakVazenjaEdit == undefined || inputdatePocetakVazenjaEdit == ""){
+			alert('Pocetak vazenja apartmana ne smije biti prazan');
+		}else if(inputkrajPocetakVazenjaEdit == null || inputkrajPocetakVazenjaEdit == undefined || inputkrajPocetakVazenjaEdit == ""){
+			alert('Kraj vazenja apartmana ne smije biti prazan');
+		}else if(inputvremeZaPrijavuEdit == null || inputvremeZaPrijavuEdit == undefined || inputvremeZaPrijavuEdit == ""){
+			alert('Vrijeme prijave ne smije biti prazan');
+		}else if(inputvremeZaOdjavuEdit == null || inputvremeZaOdjavuEdit == undefined || inputvremeZaOdjavuEdit == ""){
+			alert('Vrijeme odjave ne smije biti prazan');
+		}else{
+			
+			posaljiIzmene(apartman.id, inputBrGostijuEdit, inputBrSobaEdit, inputcenaPoNociEdit, inputdatePocetakVazenjaEdit, inputkrajPocetakVazenjaEdit,
+					inputvremeZaPrijavuEdit, inputvremeZaOdjavuEdit);
+		}
+		
 	});
 	
 	
 	divDate.append(datePocetakVazenja).append(inputdatePocetakVazenja).append(krajPocetakVazenja).append(inputkrajPocetakVazenja);
 	
-	div.append(brGostiju).append(inputBrGostiju).append(brSoba).append(inputBrSoba).append(cenaPoNoci).append(inputcenaPoNoci).append(divDate).append(buttonIzmeni);
+	div.append(brGostiju).append(inputBrGostiju).append(brSoba).append(inputBrSoba).append(cenaPoNoci).append(inputcenaPoNoci).append(divDate)
+			.append(vremeZaPrijavu).append(inputvremeZaPrijavu).append(vremeZaOdjavu).append(inputvremeZaOdjavu).append(buttonIzmeni);
 	div.hide();
 	return div;
 }
 
-function posaljiIzmene(id, inputBrGostijuEdit, inputBrSobaEdit, inputcenaPoNociEdit, inputdatePocetakVazenjaEdit, inputkrajPocetakVazenjaEdit){
+function posaljiIzmene(id, inputBrGostijuEdit, inputBrSobaEdit, inputcenaPoNociEdit, inputdatePocetakVazenjaEdit, inputkrajPocetakVazenjaEdit, inputvremeZaPrijavuEdit, inputvremeZaOdjavuEdit){
 	var obj = {"brojSoba": inputBrGostijuEdit, "brojGostiju": inputBrSobaEdit, "datePocetakVazenja": inputdatePocetakVazenjaEdit,
 			"krajPocetakVazenja": inputkrajPocetakVazenjaEdit, "cenaPoNoci": inputcenaPoNociEdit,
-			"id": id};
+			"id": id, "vremeZaPrijavu": inputvremeZaPrijavuEdit, "vremeZaOdjavu": inputvremeZaOdjavuEdit};
 	
 	$.ajax({
 		url: 'rest/apartman/edit',
@@ -461,7 +494,7 @@ function posaljiIzmene(id, inputBrGostijuEdit, inputBrSobaEdit, inputcenaPoNociE
 			alert('Uspesno izmenjen apartman');
 		},
 		error : function(response){
-			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+			alert('Ups, doslo je do neke greske prilikom izmene apartmana');
 		}
 	});
 }
@@ -517,10 +550,10 @@ function odobriKomentar(koment){
 		contentType : 'application/json',
 		data: JSON.stringify(obj),
 		success : function(response){
-			console.log('Odgovor servisa je:' + response);
+			alert('Komentar odobren');
 		},
 		error : function(response){
-			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+			alert('Ups, nesto je poslo po zlu, pokusajte ponovo kasnije');
 		}
 	});
 }
@@ -621,8 +654,9 @@ function ispisiRezervaciju(rezervacija){
 	
 	let datumRezervacija = $('<h4> <i>Datum rezervacije: </i>' + rezervacija.pocetakIznajmljivanja + '</h4>');
 	let brojNocenja = $('<h4> <i>Broj nocenja: </i>' + rezervacija.brojNocenja + '</h4>');
-	let ukupnaCena = $('<h4> <i>Ukupna cena: <i>' + rezervacija.ukupnaCena + ' <b> <i>$</i> </b></h4>');
-
+	let ukupnaCena = $('<h4> <i>Ukupna cena: </i>' + rezervacija.ukupnaCena + ' <b> <i>$</i> </b></h4>');
+	let poruka = $('<h4><i>Poruka: </i>' + rezervacija.poruka + '</h1>');
+	
 	let buttonodbijRezervaciju = $('<button>Odbij Rezervaciju</button>');
 	buttonodbijRezervaciju.on('click', function(event){
 		odbijRezervaciju(rezervacija);
@@ -638,7 +672,7 @@ function ispisiRezervaciju(rezervacija){
 		zavrsiRezervaciju(rezervacija);
 	});
 	
-	divRezervacija.append(datumRezervacija).append(brojNocenja).append(ukupnaCena);//.append(buttonodbijRezervaciju).append(buttonPrihvatiRezervaciju);
+	divRezervacija.append(datumRezervacija).append(brojNocenja).append(ukupnaCena).append(poruka);//.append(buttonodbijRezervaciju).append(buttonPrihvatiRezervaciju);
 	
 	if(rezervacija.status == 0){
 		divRezervacija.append(datumRezervacija).append(brojNocenja).append(ukupnaCena).append(buttonPrihvatiRezervaciju).append(buttonodbijRezervaciju);
@@ -672,10 +706,10 @@ function odbijRezervaciju(rezervacija){
 		contentType : 'application/json',
 		data: JSON.stringify(obj),
 		success : function(response){
-			console.log('Odgovor servisa je:' + response);
+			alert('Odbili ste rezervaciju');
 		},
 		error : function(response){
-			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+			alert('Nije moguce odbiti ovu rezervaciju');
 		}
 	});
 }
@@ -689,10 +723,10 @@ function prihvatiRezervaciju(rezervacija){
 		contentType : 'application/json',
 		data: JSON.stringify(obj),
 		success : function(response){
-			console.log('Odgovor servisa je:' + response);
+			alert('Rezervacija prihvacena');
 		},
 		error : function(response){
-			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+			alert('Nije moguce prihvatiti ovu rezervaciju');
 		}
 	});
 }
@@ -706,10 +740,10 @@ function zavrsiRezervaciju(rezervacija){
 		contentType : 'application/json',
 		data: JSON.stringify(obj),
 		success : function(response){
-			console.log('Odgovor servisa je:' + response);
+			alert('Zavrsili ste rezervaciju');
 		},
 		error : function(response){
-			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+			alert('Jos uvek nije moguce zavrsiti rezervaciju');
 		}
 	});
 	

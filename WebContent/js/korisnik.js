@@ -86,9 +86,15 @@ function ispisiMojePodatke(user){
 		let newPrezime = document.getElementById('lastEdit').value;
 		let newLozinka = document.getElementById('lozinkaEdit').value;
 		
-		console.log('Za izmenu: ' + newIme + ', ' + newPrezime + ', ' + newLozinka);
-		
-		izmena(newIme, newPrezime, newLozinka);
+		if(newIme == null || newIme == undefined || newIme == ""){
+			alert('Ime ne smije biti prazno');
+		}else if(newPrezime == null || newPrezime == undefined || newPrezime == ""){
+			alert('Prezime ne smije biti prazno');
+		}else if(newLozinka == null || newLozinka == undefined || newLozinka == ""){
+			alert('Lozinka ne smije biti prazna');
+		}else{
+			izmena(newIme, newPrezime, newLozinka);
+		}
 	});
 	
 	div2.append(tabela).append(tabela2).append(tabela3).append(tabela4).append(button);
@@ -107,6 +113,7 @@ function izmena(ime, prezime, lozinka){
 		data: JSON.stringify(obj),
 		success : function(result){
 			ispisiMojePodatke(result);
+			alert('Uspesno ste izmenili podatke')
 		},
 		error : function(){
 			alert('Ups, desila se greska prilikom izmene podataka');
@@ -368,10 +375,10 @@ function kreirajRezervaciju(pocetakIznajmljivanja, daniInput, porukaDomacinu, ap
 		contentType : 'application/json',
 		data: JSON.stringify(obj),
 		success : function(response){
-			console.log('Odgovor servisa je:' + response);
+			alert('Rezervacija je kreirana.');
 		},
 		error : function(response){
-			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+			alert('Ups, nesto je poslo po zlu prilikom kreiranja rezervacije');
 		}
 	});
 }
@@ -567,10 +574,10 @@ function posaljiOcenu(unesenaKomentar, unetaOcena, id){
 		contentType : 'application/json',
 		data: JSON.stringify(obj),
 		success : function(response){
-			console.log('Odgovor servisa je:' + response);
+			alert('Uspesno ste uneli komentar apartmana');
 		},
 		error : function(response){
-			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+			alert('Ups, doslo je do neke greske. Probajte ponovo kasnije');
 		}
 	});
 }
@@ -585,10 +592,10 @@ function odustaniOdRezervacije(rezervacija){
 		contentType : 'application/json',
 		data: JSON.stringify(obj),
 		success : function(response){
-			console.log('Odgovor servisa je:' + response);
+			alert('Uspesno ste odustali od rezervacije');
 		},
 		error : function(response){
-			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+			alert('Ups, niste u mogucnosti odustati od rezervacije trenutno.');
 		}
 	});
 }

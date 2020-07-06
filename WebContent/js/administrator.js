@@ -12,6 +12,16 @@ $(document).ready(function(){
 	$('#rezervacije').click(prikaziRezervacije());
 	
 	$('#pretrazi').click(provjeriPretragu());
+	
+	//*************************************************************
+	//Datepicker
+	$('#inputDolazak').datepicker({
+		format: "yyyy-mm-dd"
+	});
+	$('#inputOdlazak').datepicker({
+		format: "yyyy-mm-dd"
+	});
+	//**************************************************************
 })
 
 function logout(){
@@ -242,12 +252,16 @@ function ispisiApartmane(apartman){
 	let slika = ispisiSlikuDIV(apartman);
 	let datumVazenja = ispisiTerminDatuma(apartman);
 	let lokacija = ispisiLokaciju(apartman);
+	let editovanje = editovanjeApartmana(apartman);
+	let button = ispisiButton(apartman);
+	let obrisi = ispisiButtonObrisi(apartman);
+	let aktivnost = ispisiButtonAktivnost(apartman);
 	let komentari = ispisiButtonKomentariApartman(apartman);
 	let sviKomentari = prikazKomentara(apartman);
 	//let button = ispisiButton(apartman);
 	//let rezervacija = ispisiRezervacijaZakazivanje(apartman);
 	
-	div.append(podaci).append(datumVazenja).append(slika).append(lokacija).append(sviKomentari).append(komentari);//.append(rezervacija).append(button);
+	div.append(podaci).append(datumVazenja).append(slika).append(lokacija).append(obrisi).append(aktivnost).append(editovanje).append(button).append(sviKomentari).append(komentari);//.append(rezervacija).append(button);
 	divOrigin.append(div);
 }
 
@@ -330,6 +344,190 @@ function ispisiLokaciju(apartman){
 	lokacija.append(adresa).append(mesto).append(lokac);
 	
 	return lokacija;
+}
+
+function ispisiButtonObrisi(apartman){
+
+	let button;
+	if(!apartman.obrisan){
+		button = $('<button id="obrisiApartman' + apartman.id + '" style="margin-left: 20px; width: 90%;"> Obrisi </button>');
+		
+		button.on('click', function(event){
+			obrisi(apartman.id);
+		});
+	}
+	
+	return button;
+}
+function obrisi(id){
+	var obj = {"id": id};
+	
+	$.ajax({
+		url: 'rest/apartman',
+		type: 'DELETE',
+		contentType : 'application/json',
+		data: JSON.stringify(obj),
+		success : function(response){
+			alert('Uspesno ste obrisali apartman');
+		},
+		error : function(response){
+			alert('Ups, ne mozete trenutno obrisati apartman.');
+		}
+	});
+	
+}
+
+function ispisiButton(apartman){
+
+	//let button = $('<button id="izmeniApartman' + apartman.id + '" style="margin-left: 20px; width: 90%;"> Izmeni </button>');
+	let button = $('<input type="button" id="izmeniApartman' + apartman.id + '" style="margin-left: 20px; width: 90%;" value="Izmeni" />');
+	
+	button.on('click', function(event){
+		var xIzmeni = document.getElementById('editDiv' + apartman.id);
+		
+		if(xIzmeni.style.display === "none"){
+			xIzmeni.style.display = "block";
+			document.getElementById('izmeniApartman' + apartman.id).value = "Zatvori";
+		}else{
+			xIzmeni.style.display = "none";
+			document.getElementById('izmeniApartman' + apartman.id).value = "Izmeni";
+		}
+	});
+	
+	return button;
+}
+
+function editovanjeApartmana(apartman){
+	let div = $('<div id="editDiv' + apartman.id + '" style="margin-left: 20px; margin-right: 20px; border-style: solid;background-color: aqua; padding-left: 20px"></div>');
+
+	let brGostiju = $('<p>Broj gostiju:</p>');
+	let inputBrGostiju = $('<input type="text" id="inputBrGostiju' + apartman.id + '" value="' + apartman.brojGostiju + '"/>');
+
+	let brSoba = $('<p>Broj soba:</p>');
+	let inputBrSoba = $('<input type="text" id="inputBrSoba' + apartman.id + '" value="' + apartman.brojSoba + '"/>');
+	
+	let cenaPoNoci = $('<p>Cena po noci:</p>');
+	let inputcenaPoNoci = $('<input type="text" id="inputcenaPoNoci' + apartman.id + '" value="' + apartman.cenaPoNoci + '"/>');
+
+	let divDate = $('<div id="edit' + apartman.id + '"class="input-group date"></div>');
+	
+	let datePocetakVazenja = $('<p>Pocetak vazenja:</p>');
+	let inputdatePocetakVazenja = $('<input type="text" id="inputdatePocetakVazenja' + apartman.id + '" value="' + apartman.datePocetakVazenja + '" class="datepicker" />');
+	inputdatePocetakVazenja.datepicker({
+		format: "yyyy-mm-dd",
+		autoclose: true
+	});
+	
+	let krajPocetakVazenja = $('<p>Kraj vazenja:</p>');
+	let inputkrajPocetakVazenja = $('<input type="text" id="inputkrajPocetakVazenja' + apartman.id + '" value="' + apartman.krajPocetakVazenja + '" class="datepicker" />');
+	inputkrajPocetakVazenja.datepicker({
+		format: "yyyy-mm-dd",
+		autoclose: true
+	});
+	
+	let buttonIzmeni = $('<button>Izmeni</button>');
+	buttonIzmeni.on('click', function(event){
+		let inputBrGostijuEdit = document.getElementById('inputBrGostiju' + apartman.id).value;
+		let inputBrSobaEdit = document.getElementById('inputBrSoba' + apartman.id).value;
+		let inputcenaPoNociEdit = document.getElementById('inputcenaPoNoci' + apartman.id).value;
+		let inputdatePocetakVazenjaEdit = document.getElementById('inputdatePocetakVazenja' + apartman.id).value;
+		let inputkrajPocetakVazenjaEdit = document.getElementById('inputkrajPocetakVazenja' + apartman.id).value;
+		
+		if(inputBrGostijuEdit == null || inputBrGostijuEdit == undefined || inputBrGostijuEdit == ""){
+			alert('Broj gostiju ne smije biti prazan');
+		}else if(inputBrSobaEdit == null || inputBrSobaEdit == undefined || inputBrSobaEdit == ""){
+			alert('Broj soba ne smije biti prazan');
+		}else if(inputcenaPoNociEdit == null || inputcenaPoNociEdit == undefined || inputcenaPoNociEdit == ""){
+			alert('Cena po noci ne smije biti prazna');
+		}else if(inputdatePocetakVazenjaEdit == null || inputdatePocetakVazenjaEdit == undefined || inputdatePocetakVazenjaEdit == ""){
+			alert('Pocetak vazenja apartmana ne smije biti prazan');
+		}else if(inputkrajPocetakVazenjaEdit == null || inputkrajPocetakVazenjaEdit == undefined || inputkrajPocetakVazenjaEdit == ""){
+			alert('Kraj vazenja apartmana ne smije biti prazan');
+		}else{
+			
+			posaljiIzmene(apartman.id, inputBrGostijuEdit, inputBrSobaEdit, inputcenaPoNociEdit, inputdatePocetakVazenjaEdit, inputkrajPocetakVazenjaEdit);
+		}
+		
+	});
+	
+	
+	divDate.append(datePocetakVazenja).append(inputdatePocetakVazenja).append(krajPocetakVazenja).append(inputkrajPocetakVazenja);
+	
+	div.append(brGostiju).append(inputBrGostiju).append(brSoba).append(inputBrSoba).append(cenaPoNoci).append(inputcenaPoNoci).append(divDate).append(buttonIzmeni);
+	div.hide();
+	return div;
+}
+
+function posaljiIzmene(id, inputBrGostijuEdit, inputBrSobaEdit, inputcenaPoNociEdit, inputdatePocetakVazenjaEdit, inputkrajPocetakVazenjaEdit){
+	var obj = {"brojSoba": inputBrGostijuEdit, "brojGostiju": inputBrSobaEdit, "datePocetakVazenja": inputdatePocetakVazenjaEdit,
+			"krajPocetakVazenja": inputkrajPocetakVazenjaEdit, "cenaPoNoci": inputcenaPoNociEdit,
+			"id": id};
+	
+	$.ajax({
+		url: 'rest/apartman/edit',
+		type: 'POST',
+		contentType : 'application/json',
+		data: JSON.stringify(obj),
+		success : function(response){
+			alert('Uspesno izmenjen apartman');
+		},
+		error : function(response){
+			alert('Ups, doslo je do neke greske prilikom izmene apartmana');
+		}
+	});
+}
+
+function ispisiButtonAktivnost(apartman){
+
+	let button;
+	if(apartman.status == 0){
+		button = $('<button id="neaktivanApartman' + apartman.id + '" style="margin-left: 20px; width: 90%;"> Promeni u neaktivan </button>');
+		
+		button.on('click', function(event){
+			promeniNaNeaktivan(apartman);
+		});
+	}else{
+		button = $('<button id="aktivanApartman' + apartman.id + '" style="margin-left: 20px; width: 90%;"> Promeni u aktivan </button>');
+		
+		button.on('click', function(event){
+			promeniNaAktivan(apartman);
+		});
+	}
+	
+	return button;
+}
+function promeniNaNeaktivan(apartman){
+	var obj = {"id": apartman.id};
+	
+	$.ajax({
+		url: 'rest/apartman/status/neaktivan',
+		type: 'POST',
+		contentType : 'application/json',
+		data: JSON.stringify(obj),
+		success : function(response){
+			alert('Apartman je sada neaktivan');
+		},
+		error : function(response){
+			alert('Ups, ne mozete promeniti aktivnost apartmana');
+		}
+	});
+}
+
+function promeniNaAktivan(apartman){
+	var obj = {"id": apartman.id};
+	
+	$.ajax({
+		url: 'rest/apartman/status/aktivan',
+		type: 'POST',
+		contentType : 'application/json',
+		data: JSON.stringify(obj),
+		success : function(response){
+			alert('Apartman je sada aktivan');
+		},
+		error : function(response){
+			alert('Ups, ne mozete promeniti aktivnost apartmana');
+		}
+	});
 }
 
 function ispisiButtonKomentariApartman(apartman){
