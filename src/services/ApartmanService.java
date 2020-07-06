@@ -60,6 +60,23 @@ public class ApartmanService {
 	}
 	
 	@POST
+	@Path("/dodaj")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response dodajApartman(Apartman a, @Context HttpServletRequest request) {
+		ApartmanDAO aDAO = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
+		Apartman postoji = aDAO.findOneApartman(a.getId());
+		
+		if(postoji != null) {
+			return Response.status(400).build();
+		}
+		aDAO.getApartmani().put(a.getId(), a);
+		ctx.setAttribute("apartmanDAO", aDAO);
+		return Response.status(200).build();
+	}
+
+	
+	@POST
 	@Path("/search")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
