@@ -347,7 +347,7 @@ public class RezervacijaService {
 		
 		List<Apartman> pretrazeni = new ArrayList<Apartman>();
 		for(Apartman a : apartmani) {
-			if(this.isMestoValid(a.getLokacija().getAdresa().getMesto(), mesto)
+			if( (!a.isObrisan()) && this.isMestoValid(a.getLokacija().getAdresa().getMesto(), mesto)
 					&& this.isCenaValid(a.getCenaPoNoci(), cena) 
 					&& this.isDolazakValid(a.getDatePocetakVazenja(), dolazak)
 					&&  this.isOdlazakValid(a.getKrajPocetakVazenja(), odlazak)
@@ -591,7 +591,7 @@ public class RezervacijaService {
 		
 		List<Apartman> pretrazeni = new ArrayList<Apartman>();
 		for(Apartman a : apartmani) {
-			if(this.isMestoValid(a.getLokacija().getAdresa().getMesto(), mesto)
+			if( (!a.isObrisan()) && this.isMestoValid(a.getLokacija().getAdresa().getMesto(), mesto)
 					&& this.isCenaValid(a.getCenaPoNoci(), cena) 
 					&& this.isDolazakValid(a.getDatePocetakVazenja(), dolazak)
 					&&  this.isOdlazakValid(a.getKrajPocetakVazenja(), odlazak)

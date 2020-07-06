@@ -60,6 +60,35 @@ public class UserService {
 	}
 	
 	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUser(@Context HttpServletRequest request) {
+		User loggedIn = (User) request.getSession().getAttribute("user");
+		
+		return Response.ok(loggedIn).build();
+	}
+	
+	@POST
+	@Path("/edit")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response userEdit(@Context HttpServletRequest request, User u) {
+		User loggedIn = (User) request.getSession().getAttribute("user");
+		UserDAO users = (UserDAO) ctx.getAttribute("userDAO");
+	
+		System.out.println("Podaci su: " + u);
+		User user = users.findUser(loggedIn.getId());
+		user.setFirstName(u.getFirstName());
+		user.setLastName(u.getLastName());
+		user.setPassword(u.getPassword());
+		users.saveUsers("");
+		
+		
+		System.out.println("Novi user je: " + loggedIn);
+		return Response.ok(loggedIn).build();
+	}
+	
+	@GET
 	@Path("/korisnik")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -256,7 +285,7 @@ public class UserService {
 		List<Apartman> aktivni = new ArrayList<Apartman>();
 		
 		for(Apartman a : apartmani.getApartmani().values()) {
-			if( (a.getStatus() == 0) && (a.getDomacin().getId().equals(loggedIn.getId())) ) { //DOBAVLJA SAMO AKTIVNE APARTMANE
+			if( (a.getStatus() == 0) && (!a.isObrisan()) && (a.getDomacin().getId().equals(loggedIn.getId())) ) { //DOBAVLJA SAMO AKTIVNE APARTMANE
 				aktivni.add(a);		
 			}
 		}
@@ -288,7 +317,7 @@ public class UserService {
 		
 		for(Apartman a : apartmani.getApartmani().values()) {
 			if(this.doesBelongToUser(a.getId(), loggedIn)) {
-				if(this.isMestoValid(a.getLokacija().getAdresa().getMesto(), mesto)
+				if( (!a.isObrisan()) && this.isMestoValid(a.getLokacija().getAdresa().getMesto(), mesto)
 						&& this.isCenaValid(a.getCenaPoNoci(), cena) 
 						&& this.isDolazakValid(a.getDatePocetakVazenja(), dolazak)
 						&&  this.isOdlazakValid(a.getKrajPocetakVazenja(), odlazak)
@@ -338,7 +367,7 @@ public class UserService {
 		for(Apartman a : apartmani.getApartmani().values()) {
 			System.out.println("Domacin je: " + a.getDomacin());
 			System.out.println("Ulogovan je: " + loggedIn);
-			if(a.getDomacin().getId().equals(loggedIn.getId())) {
+			if(a.getDomacin().getId().equals(loggedIn.getId()) && (!a.isObrisan())) {
 				System.out.println("Nasao apartman kome je vlasnik loggedIn");
 				Apartman newApartman = new Apartman(a);
 				System.out.println("Apartman je: ");
@@ -553,7 +582,7 @@ public class UserService {
 		for(Apartman a : apartmani.getApartmani().values()) {
 			System.out.println("Domacin je: " + a.getDomacin());
 			System.out.println("Ulogovan je: " + loggedIn);
-			if(a.getDomacin().getId().equals(loggedIn.getId())) {
+			if(a.getDomacin().getId().equals(loggedIn.getId()) && (!a.isObrisan())) {
 				System.out.println("Nasao apartman kome je vlasnik loggedIn");
 				Apartman newApartman = new Apartman(a);
 				System.out.println("Apartman je: ");
@@ -642,12 +671,14 @@ public class UserService {
 		List<Apartman> aktivniPending = new ArrayList<Apartman>();
 		
 		for(Apartman a : apartmani.getApartmani().values()) {
-			Apartman newApartman = new Apartman(a);
-			if(a.getRezervacije() != null) {
-				for(Rezervacija r : a.getRezervacije()) {
-						newApartman.getRezervacije().add(r);
+			if((!a.isObrisan())) {
+				Apartman newApartman = new Apartman(a);
+				if(a.getRezervacije() != null) {
+					for(Rezervacija r : a.getRezervacije()) {
+							newApartman.getRezervacije().add(r);
+					}
+					aktivniPending.add(newApartman);
 				}
-				aktivniPending.add(newApartman);
 			}
 		}
 		System.out.println(aktivniPending);

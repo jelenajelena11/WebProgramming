@@ -53,14 +53,14 @@ function prikaziPodatke(){
 		document.getElementById('sortirajRezervacije').style.visibility = "hidden";
 		
 		$.ajax({
-			url: 'rest/user/korisnik',
+			url: 'rest/user',
 			type: 'GET',
 			contentType : 'application/json',
-			success : function(users){
-				for(let user of users){
+			success : function(user){
+				//for(let user of users){
 					console.log(user);
 					ispisiMojePodatke(user);
-				}
+				//}
 				
 				document.getElementById('searchDiv').style.visibility = "hidden";
 			}
@@ -75,13 +75,43 @@ function ispisiMojePodatke(user){
 	let div2 = $('<div height:2000px; margin-top: 300px;"></div>');
 	//let userName = $('<h4>Username: </h4'+user.getUserName);
 	//let ime = $('<h4>Ime: </h4>'+user.getFirstName);
-	let tabela = $('<table><tr><th> Username: </th> <th>'+user.userName+' </th></tr><tr><th>Ime:</th><th>'+user.firstName+'</th></tr><tr><th> Prezime:</th><th>'+user.lastName+'</th></tr><tr><th>Pol: </th><th>'+user.gender+' </th></tr><tr><th> Lozinka: </th><th>'+user.password+'</th></tr></table>');
-	let button = $('<button id="izmeniButton" style="background-color: #e7e7e7;"><a href="izmeni.html">Izmeni podatke</a></button>');
+	//let tabela = $('<table><tr><th> Username: </th> <th>'+user.userName+' </th></tr><tr><th>Ime:</th><th>'+user.firstName+'</th></tr><tr><th> Prezime:</th><th>'+user.lastName+'</th></tr><tr><th>Pol: </th><th>'+user.gender+' </th></tr><tr><th> Lozinka: </th><th>'+user.password+'</th></tr></table>');
+	let tabela = $('<p>Korisnicko ime:</p>' + user.userName + '<br>');
+	let tabela2 = $('<p>Ime:</p><input type="text" id="imeEdit" value="' + user.firstName + '" /><br>');
+	let tabela3 = $('<p>Prezime:</p><input type="text" id="lastEdit" value="' + user.lastName + '" /><br>');
+	let tabela4 = $('<p>Lozinka:</p><input type="text" id="lozinkaEdit" value="' + user.password + '" /><br>');
+	let button = $('<button id="izmeniButton" style="background-color: #e7e7e7;">Izmeni podatke</button>');
+	button.on('click', function(event){
+		let newIme = document.getElementById('imeEdit').value;
+		let newPrezime = document.getElementById('lastEdit').value;
+		let newLozinka = document.getElementById('lozinkaEdit').value;
+		
+		console.log('Za izmenu: ' + newIme + ', ' + newPrezime + ', ' + newLozinka);
+		
+		izmena(newIme, newPrezime, newLozinka);
+	});
 	
-	div2.append(tabela).append(button);
+	div2.append(tabela).append(tabela2).append(tabela3).append(tabela4).append(button);
 	div.append(div2);
 	
 	
+}
+
+function izmena(ime, prezime, lozinka){
+	var obj = {"firstName": ime, "lastName": prezime, "password": lozinka};
+	$('#podaciDiv').html('');
+	$.ajax({
+		url: 'rest/user/edit',
+		type: 'POST',
+		contentType : 'application/json',
+		data: JSON.stringify(obj),
+		success : function(result){
+			ispisiMojePodatke(result);
+		},
+		error : function(){
+			alert('Ups, desila se greska prilikom izmene podataka');
+		}
+	});
 }
 
 //************************************************************************************************8
