@@ -2,8 +2,8 @@ package model;
 
 public class Lokacija {
 
-	private Long width;
-	private Long length;
+	private Long width = 0L;
+	private Long length = 0L;
 	private Adresa adresa;
 	
 	public Lokacija() {

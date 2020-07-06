@@ -12,11 +12,14 @@ $(document).ready(function(){
 	$('#apartmentForm').submit( (event)=>{
 		event.preventDefault();
 		
+		
 		var obj = {"tipSobe":$('#tipSobe').val(), "brojSoba" : $('#brojSoba').val(), "brojGostiju" : $('#brojGostiju').val(), "datePocetakVazenja" : $('#datePocetakVazenja').val(), 
-				"krajPocetakVazenja" : $('#krajPocetakVazenja').val(), "domacin" : $('#domacin').val(),
+				"krajPocetakVazenja" : $('#krajPocetakVazenja').val(),
 				"cenaPoNoci" : $('#cenaPoNoci').val(), "vremeZaPrijavu" : $('#vremeZaPrijavu').val(), 
-				"vremeZaOdjavu" : $('#vremeZaOdjavu').val(), "status" : $('#status').val()};
-		   
+				"vremeZaOdjavu" : $('#vremeZaOdjavu').val(),
+				"lokacija": {"adresa": {"mesto": $('#mesto').val(), "ulica": $('#ulica').val()}}};
+								//{ ^ OVAKO I ZA SADRZAJ APARTMANA ^}
+		
 		console.log(JSON.stringify(obj));
 		$.ajax({
 	    	contentType: 'application/json',

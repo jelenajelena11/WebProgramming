@@ -66,13 +66,41 @@ public class ApartmanService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response dodajApartman(Apartman a, @Context HttpServletRequest request) {
 		ApartmanDAO aDAO = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
+		User loggedIn = (User) request.getSession().getAttribute("user");
+		System.out.println("Novi apartman je: " + a);
 		Apartman postoji = aDAO.findOneApartman(a.getId());
 		
 		if(postoji != null) {
 			return Response.status(400).build();
 		}
+		a.setDomacin(loggedIn);
 		aDAO.getApartmani().put(a.getId(), a);
 		ctx.setAttribute("apartmanDAO", aDAO);
+		return Response.status(200).build();
+	}
+	
+	@SuppressWarnings("null")
+	@POST
+	@Path("/edit")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response editApartman(Apartman a, @Context HttpServletRequest request) {
+		ApartmanDAO aDAO = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
+		Apartman postoji = aDAO.findOneApartman(a.getId());
+		System.out.println("Za izmenu apartman:" + a);
+		
+		if(postoji == null) {
+			return Response.status(400).build();
+		}
+		postoji.setBrojGostiju(a.getBrojGostiju());
+		postoji.setBrojSoba(a.getBrojSoba());
+		postoji.setCenaPoNoci(a.getCenaPoNoci());
+		postoji.setDatePocetakVazenja(a.getDatePocetakVazenja());
+		postoji.setKrajPocetakVazenja(a.getKrajPocetakVazenja());
+		System.out.println("Izmenjen apartman: " + postoji);
+		
+		//aDAO.getApartmani().put(a.getId(), a);
+		//ctx.setAttribute("apartmanDAO", aDAO);
 		return Response.status(200).build();
 	}
 

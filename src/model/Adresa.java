@@ -6,9 +6,9 @@ public class Adresa {
 	
 	private UUID id;
 	private String ulica;
-	private int broj;
+	private int broj = 0;
 	private String mesto;
-	private int postanskiBroj;
+	private int postanskiBroj = 0;
 	
 	public Adresa() {
 		this.id = UUID.randomUUID();
