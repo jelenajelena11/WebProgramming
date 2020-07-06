@@ -2,6 +2,7 @@ package services;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -58,31 +59,76 @@ public class RezervacijaService {
 		
 		Apartman found = apartmani.findOneApartman(newRezervacija.getApartman());
 		if(found != null) {
-			int cenaPoNoci = found.getCenaPoNoci();
-			int brojNocenja = newRezervacija.getBrojNocenja();
-			newRezervacija.setUkupnaCena(brojNocenja*cenaPoNoci);
-			newRezervacija.setStatus(0);							//KREIRANA	
-			
-			UUID id = UUID.randomUUID();
-			newRezervacija.setId(id);
-			newRezervacija.setGost(user.getId());
-			rezervacije.getRezervacije().put(id, newRezervacija);
-			user.getZakazaneRezervacije().add(newRezervacija);
-			
-			if(found.getRezervacije() == null) {
-				found.setRezervacije(new ArrayList<Rezervacija>());
+			if(!this.provjeraZauzeca(rezervacije.getRezervacije().values(), newRezervacija, found.getId(), found)) {
+				int cenaPoNoci = found.getCenaPoNoci();
+				int brojNocenja = newRezervacija.getBrojNocenja();
+				newRezervacija.setUkupnaCena(brojNocenja*cenaPoNoci);
+				newRezervacija.setStatus(0);							//KREIRANA	
+				
+				UUID id = UUID.randomUUID();
+				newRezervacija.setId(id);
+				newRezervacija.setGost(user.getId());
+				rezervacije.getRezervacije().put(id, newRezervacija);
+				user.getZakazaneRezervacije().add(newRezervacija);
+				
+				if(found.getRezervacije() == null) {
+					found.setRezervacije(new ArrayList<Rezervacija>());
+				}
+				found.getRezervacije().add(newRezervacija);
+				
+				users.saveUsers("");
+				rezervacije.saveRezervacije("");
+				apartmani.saveApartmani("");
+				
+				return Response.ok(newRezervacija).build();
 			}
-			found.getRezervacije().add(newRezervacija);
-			
-			users.saveUsers("");
-			rezervacije.saveRezervacije("");
-			apartmani.saveApartmani("");
-			
-			return Response.ok(newRezervacija).build();
+			return Response.status(400).build();
 		}
 		
 		return Response.status(400).build();
 		
+	}
+	
+	private boolean provjeraZauzeca(Collection<Rezervacija> collection, Rezervacija novaRez, UUID id, Apartman a) {
+		String[] zauzimanje = novaRez.getPocetakIznajmljivanja().split("-");
+		System.out.println("Termin: " + zauzimanje[0] + " " + zauzimanje[1] + " " + zauzimanje[2]);
+		LocalDate pocetakRez = LocalDate.of(Integer.parseInt(zauzimanje[0]), Integer.parseInt(zauzimanje[1]), Integer.parseInt(zauzimanje[2]));
+		LocalDate krajRez = LocalDate.of(Integer.parseInt(zauzimanje[0]), Integer.parseInt(zauzimanje[1]), Integer.parseInt(zauzimanje[2])).plusDays(new Long(novaRez.getBrojNocenja()));
+		System.out.println("Termin: " + krajRez.getYear() + " " + krajRez.getMonthValue() + " " + krajRez.getDayOfMonth());
+		
+		String[] aVaziOd = a.getDatePocetakVazenja().split("-");
+		String[] aVaziDo = a.getKrajPocetakVazenja().split("-");
+		LocalDate aPocetakRez = LocalDate.of(Integer.parseInt(aVaziOd[0]), Integer.parseInt(aVaziOd[1]), Integer.parseInt(aVaziOd[2]));
+		LocalDate aKrajRez = LocalDate.of(Integer.parseInt(aVaziDo[0]), Integer.parseInt(aVaziDo[1]), Integer.parseInt(aVaziDo[2]));
+		
+		if( (pocetakRez.isBefore(aPocetakRez)) ||
+				(pocetakRez.isAfter(aKrajRez)) ||
+				(krajRez.isAfter(aKrajRez) ) ) {
+			System.out.println("Vraca true");
+			return true;
+		}
+		
+		for(Rezervacija r : collection) {
+			if(r.getApartman().equals(id) && (r.getStatus() == 3)) {	//PRIHVACENA
+				String[] zauzetOd = r.getPocetakIznajmljivanja().split("-");
+				
+				LocalDate pocetak = LocalDate.of(Integer.parseInt(zauzetOd[0]), Integer.parseInt(zauzetOd[1]), Integer.parseInt(zauzetOd[2]));
+				LocalDate kraj = LocalDate.of(Integer.parseInt(zauzetOd[0]), Integer.parseInt(zauzetOd[1]), Integer.parseInt(zauzetOd[2])).plusDays(new Long(r.getBrojNocenja()));
+				System.out.println("Poredi pocetak: "  + pocetak.getYear() + " " + pocetak.getMonthValue() + " " + pocetak.getDayOfMonth());
+				System.out.println("Poredi kraj: "  + kraj.getYear() + " " + kraj.getMonthValue() + " " + kraj.getDayOfMonth());
+				
+				if((pocetakRez.isAfter(pocetak) && krajRez.isBefore(kraj)) || 
+						(pocetakRez.isBefore(pocetak) && krajRez.isAfter(pocetak)) ||
+						(pocetakRez.isBefore(kraj) && krajRez.isAfter(kraj)) || 
+						(pocetakRez.isBefore(pocetak) && krajRez.isAfter(kraj)) ) {
+					System.out.println("Vraca true");
+					return true;
+				}
+			}
+			
+		}
+		System.out.println("Vraca false");
+		return false;
 	}
 	
 	@GET
