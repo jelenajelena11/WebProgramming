@@ -169,6 +169,36 @@ public class ApartmanService {
 	}
 	
 	@POST
+	@Path("/status/aktivan")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response statusNaAktivan(@Context HttpServletRequest request, Apartman a) {
+		
+		ApartmanDAO apartmani = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
+		Apartman ap = apartmani.findOneApartman(a.getId());
+		
+		ap.setStatus(0); 		//Status na aktivan
+		apartmani.saveApartmani("");
+		
+		return Response.ok().build();
+	}
+	
+	@POST
+	@Path("/status/neaktivan")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response statusNaNektivan(@Context HttpServletRequest request, Apartman a) {
+		
+		ApartmanDAO apartmani = (ApartmanDAO) ctx.getAttribute("apartmanDAO");
+		Apartman ap = apartmani.findOneApartman(a.getId());
+		
+		ap.setStatus(1); 		//Status na neaktivan
+		apartmani.saveApartmani("");
+		
+		return Response.ok().build();
+	}
+	
+	@POST
 	@Path("/komentar/gost")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

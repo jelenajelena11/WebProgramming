@@ -46,10 +46,9 @@ function prikaziKorisnike(){
 			type: 'GET',
 			contentType : 'application/json',
 			success : function(users){
-				for(let user of users){
-					console.log(user);
-					ispisiKorisnike(user);
-				}
+				//for(let user of users){
+					ispisiKorisnike(users);
+				//}
 			}
 		});
 	}
@@ -81,17 +80,113 @@ function prikaziDomacine(){
 	}
 }
 
-function ispisiKorisnike(user){
+function ispisiKorisnike(users){
 	
+//	let div = $('#korisniciDIV');
+//	let div2 = $('<div height:2000px; margin-top: 300px;"></div>');
+//	//let userName = $('<h4>Username: </h4'+user.getUserName);
+//	//let ime = $('<h4>Ime: </h4>'+user.getFirstName);
+//	let naziv = $('<h3>Pregled svih korisnika:</h3>')
+//	let tabela = $('<table><tr><th> Username: </th> <th>'+user.userName+' </th></tr><tr><th>Ime:</th><th>'+user.firstName+'</th></tr><tr><th> Prezime:</th><th>'+user.lastName+'</th></tr><tr><th>Pol: </th><th>'+user.gender+' </th></tr><tr><th> Lozinka: </th><th>'+user.password+'</th></tr></table>');
+//	
+//	div2.append(naziv).append(tabela);
+//	div.append(div2);
 	let div = $('#korisniciDIV');
 	let div2 = $('<div height:2000px; margin-top: 300px;"></div>');
 	//let userName = $('<h4>Username: </h4'+user.getUserName);
 	//let ime = $('<h4>Ime: </h4>'+user.getFirstName);
+	let pretraga = ispisiPretragu();
 	let naziv = $('<h3>Pregled svih korisnika:</h3>')
-	let tabela = $('<table><tr><th> Username: </th> <th>'+user.userName+' </th></tr><tr><th>Ime:</th><th>'+user.firstName+'</th></tr><tr><th> Prezime:</th><th>'+user.lastName+'</th></tr><tr><th>Pol: </th><th>'+user.gender+' </th></tr><tr><th> Lozinka: </th><th>'+user.password+'</th></tr></table>');
+	//let tabela = $('<table><tr><th> Username: </th> <th>'+user.userName+' </th></tr><tr><th>Ime:</th><th>'+user.firstName+'</th></tr><tr><th> Prezime:</th><th>'+user.lastName+'</th></tr><tr><th>Pol: </th><th>'+user.gender+' </th></tr><tr><th> Lozinka: </th><th>'+user.password+'</th></tr></table>');
+	let tabela = $('<table border="1"><th>Korisnicko Ime</th><th>Ime</th><th>Prezime</th><th>Email</th><th>Adresa</th> </table>');
+	for(let user of users){
+		let tr = $('<tr></tr>');
+		let username = $('<td>' + user.userName + '</td>');
+		let ime = $('<td>' + user.firstName + '</td>');
+		let prezime = $('<td>' + user.lastName + '</td>');
+		let email = $('<td>' + user.email + '</td>');
+		let adresa = $('<td>' + user.address + '</td>');
+		tr.append(username).append(ime).append(prezime).append(email).append(adresa);
+		tabela.append(tr);
+	}
 	
-	div2.append(naziv).append(tabela);
+	div2.append(naziv).append(pretraga).append(tabela);
 	div.append(div2);
+}
+
+function ispisiPretragu(){
+	var div = $('<div><div>');
+	let pUsername = $('<p>Unesi korisnicko ime:</p>');
+	let inputUsername = $('<input id="korisnickoIme" type="text" placeholder="korisnicko ime"/>');
+	
+	let pImee = $('<p>Unesi ime:</p>');
+	let inputIme = $('<input id="ime" type="text" placeholder="ime"/>');
+	let pPrezimee = $('<p>Unesi prezime:</p>');
+	let inputPrezime = $('<input id="prezime" type="text" placeholder="prezime"/>');
+	
+	let pPol = $('<p>Unesi pol:</p>');
+	let inputMusko = $('<input type="radio" name="pol" id="m">M<br>');
+	let inputZensko = $('<input type="radio" name="pol" id="f">F<br>');
+	
+	let pUloga = $('<p>Unesi ulogu:</p>');
+	let inputGost = $('<input type="radio" name="uloga" id="gost">Gost<br>');
+	let inputDomacin = $('<input type="radio" name="uloga" id="domacin">Domacin<br>');
+	
+	let button = $('<br><button>Pretrazi</button>');
+	
+	button.on('click', function(event){
+		var usernameText = document.getElementById('korisnickoIme').value;
+		var imeText = document.getElementById('ime').value;
+		var prezimeText = document.getElementById('prezime').value;
+		var mElem = document.getElementById('m').checked;
+		var fElem = document.getElementById('f').checked;
+		var pol = "";
+		if(mElem){
+			pol = "M"
+		}else if(fElem){
+			pol = "F"
+		}else{
+			pol = "";
+		}
+		
+		var gostElem = document.getElementById('gost').checked;
+		var domacinElem = document.getElementById('domacin').checked;
+		var uloga = "";
+		if(gostElem){
+			uloga = "0"
+		}else if(domacinElem){
+			uloga = "2"
+		}else{
+			uloga = "";
+		}
+		
+		pretraziGoste(usernameText, imeText, prezimeText, pol, uloga);
+	});
+	
+	div.append(pUsername).append(inputUsername).append(pImee).append(inputIme).append(pPrezimee).append(inputPrezime).append(pPol).append(inputMusko).append(inputZensko).append(pUloga).append(inputGost).append(inputDomacin).append(button);
+	return div;
+}
+
+function pretraziGoste(usernameText, imeText, prezimeText, pol, uloga){
+	$('#korisniciDIV').html('');
+	
+	var obj = {"username": usernameText, "ime": imeText, "prezime": prezimeText, "pol" : pol,
+						"uloga": uloga};
+	
+	$.ajax({
+		url: 'rest/user/administrator/korisnik/search',
+		type: 'POST',
+		contentType : 'application/json',
+		data: JSON.stringify(obj),
+		success : function(response){
+			//for(let res of response){
+			ispisiKorisnike(response);
+			//}
+		},
+		error : function(response){
+			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+		}
+	});
 }
 
 

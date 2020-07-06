@@ -63,11 +63,48 @@ public class UserService {
 	@Path("/korisnik")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<User> getUsersKorisnik(@Context HttpServletRequest request) {
+	public Response getUsersKorisnik(@Context HttpServletRequest request) {
 		UserDAO users = (UserDAO) ctx.getAttribute("userDAO");
+		
+		List<User> usersArray = this.getAllUsers(users);
+		
+		return Response.ok(usersArray).build();
+	}
+	
+	@POST
+	@Path("/administrator/korisnik/search")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUsersKorisnikSearch(@Context HttpServletRequest request, String search) {
+		UserDAO users = (UserDAO) ctx.getAttribute("userDAO");
+		
+		String[] searchArray = search.split(",");
+		String username = ((searchArray[0]).split(":"))[1];
+		String ime = ((searchArray[1]).split(":"))[1];
+		String prezime = ((searchArray[2]).split(":"))[1];
+		String pol = ((searchArray[3]).split(":"))[1];
+		String uloga = ((searchArray[4]).split(":"))[1];
+		
+		List<User> usersArray = this.getAllUsers(users);
+		
+		List<User> ok = new ArrayList<User>();
+		for(User u : usersArray) {
+			if(this.isUsernameValid(u.getUserName(), username)
+					&& this.isImeValid(u.getFirstName(), ime)
+					&& this.isPrezimeValid(u.getLastName(), prezime)
+					&& this.isPolValid(u.getGender(), pol)
+					&& this.isUlogaValid(u.getUloga(), uloga)) {
+				ok.add(u);
+			}
+		}
+		
+		return Response.ok(ok).build();
+	}
+	
+	private List<User> getAllUsers(UserDAO users){
 		ArrayList<User> usersArray = new ArrayList<User>();
 		for(User u : users.getUsers().values()) {
-			if(u.getUloga() == 0) {
+			if(u.getUloga() == 0 || u.getUloga() == 2) {
 				usersArray.add(u);
 			}
 		}
@@ -153,8 +190,25 @@ public class UserService {
 	private boolean isPolValid(String pol, String toSearch) {
 		if(!toSearch.equals("")) {
 			toSearch = toSearch.replace("\"", "");
-			toSearch = toSearch.replace("}", "");
+			//toSearch = toSearch.replace("}", "");
 			if(pol.contains(toSearch)) {
+				return true;
+			}
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean isUlogaValid(int uloga, String toSearch) {
+		if(!toSearch.equals("")) {
+			toSearch = toSearch.replace("\"", "");
+			toSearch = toSearch.replace("}", "");
+			System.out.println("uloga search: " + toSearch);
+			if(toSearch.equals("")) {
+				return true;
+			}
+			int ulogaSearch = Integer.parseInt(toSearch);
+			if(uloga == ulogaSearch) {
 				return true;
 			}
 			return false;
