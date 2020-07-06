@@ -182,10 +182,11 @@ function ispisiApartmane(apartman){
 	let datumVazenja = ispisiTerminDatuma(apartman);
 	let lokacija = ispisiLokaciju(apartman);
 	let button = ispisiButton(apartman);
+	let aktivnost = ispisiButtonAktivnost(apartman);
 	let komentari = ispisiButtonKomentariApartman(apartman);
 	let sviKomentari = prikazKomentara(apartman);
 	
-	div.append(podaci).append(datumVazenja).append(slika).append(lokacija).append(button).append(sviKomentari).append(komentari);
+	div.append(podaci).append(datumVazenja).append(slika).append(lokacija).append(aktivnost).append(button).append(sviKomentari).append(komentari);
 	divOrigin.append(div);
 }
 
@@ -272,7 +273,7 @@ function ispisiLokaciju(apartman){
 //ISPISUJE BUTTON I DEFINISE EVENT HANDLER
 function ispisiButton(apartman){
 
-	let button = $('<button id="izmeniApartman' + apartman.id + '"> Izmeni </button>');
+	let button = $('<button id="izmeniApartman' + apartman.id + '" style="margin-left: 20px; width: 90%;"> Izmeni </button>');
 	
 	button.on('click', function(event){
 		alert('Kliknut apartman: ' + apartman.id);
@@ -281,6 +282,57 @@ function ispisiButton(apartman){
 	});
 	
 	return button;
+}
+
+function ispisiButtonAktivnost(apartman){
+
+	let button;
+	if(apartman.status == 0){
+		button = $('<button id="neaktivanApartman' + apartman.id + '" style="margin-left: 20px; width: 90%;"> Promeni u neaktivan </button>');
+		
+		button.on('click', function(event){
+			promeniNaNeaktivan(apartman);
+		});
+	}else{
+		button = $('<button id="aktivanApartman' + apartman.id + '" style="margin-left: 20px; width: 90%;"> Promeni u aktivan </button>');
+		
+		button.on('click', function(event){
+			promeniNaAktivan(apartman);
+		});
+	}
+	
+	return button;
+}
+function promeniNaNeaktivan(apartman){
+	var obj = {"id": apartman.id};
+	
+	$.ajax({
+		url: 'rest/apartman/status/neaktivan',
+		type: 'POST',
+		contentType : 'application/json',
+		data: JSON.stringify(obj),
+		success : function(response){
+		},
+		error : function(response){
+			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+		}
+	});
+}
+
+function promeniNaAktivan(apartman){
+	var obj = {"id": apartman.id};
+	
+	$.ajax({
+		url: 'rest/apartman/status/aktivan',
+		type: 'POST',
+		contentType : 'application/json',
+		data: JSON.stringify(obj),
+		success : function(response){
+		},
+		error : function(response){
+			console.log('Ups, nesto je poslo po zlu prilikom dobavljanja vremena');
+		}
+	});
 }
 
 function ispisiButtonKomentariApartman(apartman){
@@ -490,7 +542,7 @@ function ispisiRezervaciju(rezervacija){
 	console.log('Sada je datum: ');
 	console.log(dateRezervacije.getFullYear() + '-' + (dateRezervacije.getMonth() ) + '-' + dateRezervacije.getDate());
 
-	if(now > dateRezervacije){
+	if((now > dateRezervacije) && (rezervacija.status == 3)){
 		console.log('Datum je prosao!');
 		divRezervacija.append(buttonZavrsiRezervaciju);
 	}
