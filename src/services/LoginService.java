@@ -24,7 +24,7 @@ public class LoginService {
 	@PostConstruct
 	public void init() {
 		if(ctx.getAttribute("userDAO") == null) {
-			ctx.setAttribute("userDAO", new UserDAO());
+			ctx.setAttribute("userDAO", new UserDAO(ctx.getRealPath("")));
 		}
 	}
 	

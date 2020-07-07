@@ -23,8 +23,10 @@ import model.Rezervacija;
 public class RezervacijaDAO {
 
 	private HashMap<UUID, Rezervacija> rezervacije = new HashMap<UUID, Rezervacija>();
+	private String path;
 	
-	public RezervacijaDAO() {
+	public RezervacijaDAO(String path) {
+		this.path = path;
 		this.loadRezervacija("");
 	}
 
@@ -37,7 +39,7 @@ public class RezervacijaDAO {
 	}
 
 	public void saveRezervacije(String contextPath) {
-		File f = new File("C:\\Users\\Korisnik\\Desktop\\projekat\\WebProgramming\\WebContent\\data\\rezervacija.txt");
+		File f = new File(this.path + "\\data\\rezervacija.txt");
 		FileWriter fileWriter = null;
 		try {
 			//f.createNewFile();
@@ -68,7 +70,7 @@ public class RezervacijaDAO {
 		BufferedReader in = null;
 		File file = null;
 		try {
-			file = new File("C:\\Users\\Korisnik\\Desktop\\projekat\\WebProgramming\\WebContent\\data\\rezervacija.txt");
+			file = new File(this.path + "\\data\\rezervacija.txt");
 			in = new BufferedReader(new FileReader(file));
 
 			ObjectMapper objectMapper = new ObjectMapper();

@@ -22,9 +22,10 @@ import model.Apartman;
 public class ApartmanDAO {
 
 	private HashMap<UUID, Apartman> apartmani = new HashMap<UUID, Apartman>();
+	private String path;
 	
-	public ApartmanDAO() {
-		
+	public ApartmanDAO(String path) {
+		this.path = path;
 		this.loadApartmani("");
 		
 //		UUID id1 = UUID.randomUUID();
@@ -65,7 +66,7 @@ public class ApartmanDAO {
 	}
 	
 	public void saveApartmani(String contextPath) {
-		File f = new File("C:\\Users\\Korisnik\\Desktop\\projekat\\WebProgramming\\WebContent\\data\\apartman.txt");
+		File f = new File(this.path + "\\data\\apartman.txt");
 		FileWriter fileWriter = null;
 		try {
 			//f.createNewFile();
@@ -96,7 +97,7 @@ public class ApartmanDAO {
 		BufferedReader in = null;
 		File file = null;
 		try {
-			file = new File("C:\\Users\\Korisnik\\Desktop\\projekat\\WebProgramming\\WebContent\\data\\apartman.txt");
+			file = new File(this.path + "\\data\\apartman.txt");
 			in = new BufferedReader(new FileReader(file));
 
 			ObjectMapper objectMapper = new ObjectMapper();

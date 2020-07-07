@@ -36,10 +36,10 @@ public class UserService {
 	@PostConstruct
 	public void init() {
 		if(ctx.getAttribute("userDAO") == null) {
-			ctx.setAttribute("userDAO", new UserDAO());
+			ctx.setAttribute("userDAO", new UserDAO(ctx.getRealPath("")));
 		}
 		if(ctx.getAttribute("apartmanDAO") == null) {
-			ctx.setAttribute("apartmanDAO", new ApartmanDAO());
+			ctx.setAttribute("apartmanDAO", new ApartmanDAO(ctx.getRealPath("")));
 		}
 	}
 	

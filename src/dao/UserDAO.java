@@ -27,9 +27,10 @@ import model.User;
 public class UserDAO {
 
 	private HashMap<String, User> users = new HashMap<String, User>();
+	private String path;
 	
-	public UserDAO() {
-		
+	public UserDAO(String path) {
+		this.path = path;
 		this.loadUsers("");
 		
 //		User admin = new User("Goku", "goran", "Goran", "Kuljanin", "goku@gmail.com", "Ugljevik", "M", 1);
@@ -94,7 +95,7 @@ public class UserDAO {
 	}
 	
 	public void saveUsers(String contextPath) {
-		File f = new File("C:\\Users\\Korisnik\\Desktop\\projekat\\WebProgramming\\WebContent\\data\\user.txt");
+		File f = new File(this.path + "\\data\\user.txt");
 		FileWriter fileWriter = null;
 		try {
 			//f.createNewFile();
@@ -124,7 +125,7 @@ public class UserDAO {
 		BufferedReader in = null;
 		File file = null;
 		try {
-			file = new File("C:\\Users\\Korisnik\\Desktop\\projekat\\WebProgramming\\WebContent\\data\\user.txt");
+			file = new File(this.path + "\\data\\user.txt");
 			in = new BufferedReader(new FileReader(file));
 
 			ObjectMapper objectMapper = new ObjectMapper();
